@@ -19,6 +19,8 @@ class AppAsset extends AssetBundle
     public $baseUrl = '@web';
     public $css = [
         'css/site.css',
+        "adminlte/plugins/datatables/dataTables.bootstrap.css",
+        'css/styles.css',
     ];
     public $js = [
     ];

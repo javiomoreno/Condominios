@@ -6,37 +6,41 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\Usuarios */
 
-$this->title = $model->id_usuario;
-$this->params['breadcrumbs'][] = ['label' => 'Usuarios', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = "Detalle de Usuario";
 ?>
 <div class="usuarios-view">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id_usuario], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id_usuario], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+        </div>
+        <div class="box-body">
+          <?= DetailView::widget([
+            'model' => $model,
+            'attributes' => [
+              'tipoUsuarioIdTipoUsuario.nombre',
+              'nombre',
+              'apellido',
+              'cedula',
+              'rif',
+              'correo',
+              'telefono',
+              'usuario',
+              [                      // the owner name of the model
+                'label' => 'Clave de Acceso',
+                'value' => '*********',
+              ],
             ],
-        ]) ?>
-    </p>
-
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id_usuario',
-            'nombre',
-            'apellido',
-            'correo',
-            'telefono',
-            'usuario',
-            'clave',
-            'tipoUsuario_id_tipoUsuario',
-        ],
-    ]) ?>
-
+            ]) ?>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12" style="text-align: center;">
+            <p>
+              <?= Html::a('Modificar', ['update', 'id' => $model->id_usuario], ['class' => 'btn btn-primary']) ?>
+            </p>
+          </div>
+        </div>
+      </div>
+  </div>
 </div>

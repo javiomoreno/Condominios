@@ -8,6 +8,7 @@ use app\models\search\UsuariosSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 
 /**
  * UsuariosController implements the CRUD actions for Usuarios model.
@@ -20,6 +21,17 @@ class UsuariosController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index'],
+                'rules' => [
+                    [
+                        'actions' => ['index', 'create', 'update', 'view'],
+                        'allow' => true,
+                        'roles' => ['administrador'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -35,12 +47,10 @@ class UsuariosController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new UsuariosSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
+        $this->layout ="main-admin";
+        $model = Usuarios::find()->all();
         return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+            'model' => $model,
         ]);
     }
 
@@ -51,6 +61,7 @@ class UsuariosController extends Controller
      */
     public function actionView($id)
     {
+        $this->layout ="main-admin";
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -63,10 +74,19 @@ class UsuariosController extends Controller
      */
     public function actionCreate()
     {
+        $this->layout ="main-admin";
         $model = new Usuarios();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id_usuario]);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->setPassword($model->clave);
+            if($model->save()){
+              return $this->redirect(['view', 'id' => $model->id_usuario]);
+            }
+            else {
+              return $this->render('create', [
+                  'model' => $model,
+              ]);
+            }
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -82,10 +102,16 @@ class UsuariosController extends Controller
      */
     public function actionUpdate($id)
     {
+        $this->layout ="main-admin";
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id_usuario]);
+        $claveOld = $model->clave;
+        if ($model->load(Yii::$app->request->post())) {
+          if ($model->clave !== $claveOld) {
+            $model->setPassword($model->clave);
+          }
+          $model->save();
+          return $this->redirect(['view', 'id' => $model->id_usuario]);
         } else {
             return $this->render('update', [
                 'model' => $model,

@@ -5,6 +5,8 @@ namespace app\models;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+use app\models\TipoUsuarios;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "usuarios".
@@ -12,13 +14,15 @@ use yii\web\IdentityInterface;
  * @property integer $id_usuario
  * @property string $nombre
  * @property string $apellido
+ * @property string $cedula
+ * @property string $rif
  * @property string $correo
  * @property string $telefono
  * @property string $usuario
  * @property string $clave
  * @property integer $tipoUsuario_id_tipoUsuario
  *
- * @property TipoUsuario $tipoUsuarioIdTipoUsuario
+ * @property TipoUsuarios $tipoUsuarioIdTipoUsuario
  */
 class Usuarios extends ActiveRecord implements IdentityInterface
 {
@@ -36,12 +40,14 @@ class Usuarios extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['nombre', 'apellido', 'correo', 'telefono', 'usuario', 'clave', 'tipoUsuario_id_tipoUsuario'], 'required'],
-            [['tipoUsuario_id_tipoUsuario'], 'integer'],
+            [['nombre', 'correo', 'telefono', 'usuario', 'clave', 'tipoUsuarios_id_tipoUsuario'], 'required'],
+            [['tipoUsuarios_id_tipoUsuario'], 'integer'],
+            [['cedula', 'rif'], 'string', 'max' => 5000],
             [['nombre', 'apellido', 'telefono', 'usuario'], 'string', 'max' => 100],
             [['correo'], 'string', 'max' => 200],
+            [['correo'], 'email'],
             [['clave'], 'string', 'max' => 250],
-            [['tipoUsuario_id_tipoUsuario'], 'exist', 'skipOnError' => true, 'targetClass' => TipoUsuario::className(), 'targetAttribute' => ['tipoUsuario_id_tipoUsuario' => 'id_tipoUsuario']],
+            [['tipoUsuarios_id_tipoUsuario'], 'exist', 'skipOnError' => true, 'targetClass' => TipoUsuarios::className(), 'targetAttribute' => ['tipoUsuarios_id_tipoUsuario' => 'id_tipoUsuario']],
         ];
     }
 
@@ -52,13 +58,16 @@ class Usuarios extends ActiveRecord implements IdentityInterface
     {
         return [
             'id_usuario' => 'Id Usuario',
-            'nombre' => 'Nombre',
-            'apellido' => 'Apellido',
-            'correo' => 'Correo',
-            'telefono' => 'Telefono',
-            'usuario' => 'Usuario',
-            'clave' => 'Clave',
-            'tipoUsuario_id_tipoUsuario' => 'Tipo Usuario Id Tipo Usuario',
+            'nombre' => 'Nombre de Usuario',
+            'apellido' => 'Apellido de Usuario',
+            'cedula' => 'Cédula de Usuario',
+            'rif' => 'Rif de Usuario',
+            'correo' => 'Correo de Usuario',
+            'telefono' => 'Telefono de Usuario',
+            'usuario' => 'Usuario de Conexión',
+            'clave' => 'Clave de Acceso',
+            'tipoUsuarios_id_tipoUsuario' => 'Tipo Usuario',
+            'tipoUsuarioIdTipoUsuario.nombre' => 'Tipo Usuario',
         ];
     }
 
@@ -67,7 +76,13 @@ class Usuarios extends ActiveRecord implements IdentityInterface
      */
     public function getTipoUsuarioIdTipoUsuario()
     {
-        return $this->hasOne(TipoUsuario::className(), ['id_tipoUsuario' => 'tipoUsuario_id_tipoUsuario']);
+        return $this->hasOne(TipoUsuarios::className(), ['id_tipoUsuario' => 'tipoUsuarios_id_tipoUsuario']);
+    }
+
+    public static function getListaTipoUsuarios()
+    {
+        $opciones = TipoUsuarios::find()->asArray()->all();
+        return ArrayHelper::map($opciones, 'id_tipoUsuario', 'nombre');
     }
 
     public static function findIdentity($id)
@@ -161,4 +176,5 @@ class Usuarios extends ActiveRecord implements IdentityInterface
     public static function findIdentityByAccessToken($token, $type = null)
     {
     }
+
 }

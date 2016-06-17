@@ -20,17 +20,17 @@
                 'items' => [
                     ['label' => 'Menú', 'options' => ['class' => 'header']],
                     ['label' => 'Dashboard', 'icon' => 'fa fa-laptop', 'url' => ['/administrador/index']],
-                    ['label' => 'Apartamentos', 'icon' => 'fa fa-home', 'url' => ['/gii']],
-                    ['label' => 'Usuarios', 'icon' => 'fa fa-group', 'url' => ['/debug']],
-                    ['label' => 'Servicios', 'icon' => 'fa fa-sitemap', 'url' => ['site/login']],
-                    ['label' => 'Items', 'icon' => 'fa fa-check-square', 'url' => ['/gii']],
+                    ['label' => 'Apartamentos', 'icon' => 'fa fa-home', 'url' => ['/apartamentos/index']],
+                    ['label' => 'Usuarios', 'icon' => 'fa fa-group', 'url' => ['/usuarios/index']],
+                    ['label' => 'Servicios', 'icon' => 'fa fa-sitemap', 'url' => ['/servicios/index']],
+                    ['label' => 'Items', 'icon' => 'fa fa-check-square', 'url' => ['/items/index']],
                     [
                         'label' => 'Facturas',
                         'icon' => 'fa fa-file-text',
                         'url' => '#',
                         'items' => [
-                            ['label' => 'Gastos Administativos', 'icon' => 'fa fa-circle-o', 'url' => ['/gii'],],
-                            ['label' => 'Servicios de Condominio', 'icon' => 'fa fa-circle-o', 'url' => ['/debug'],],
+                            ['label' => 'Gastos', 'icon' => 'fa fa-circle-o', 'url' => ['/factura-gastos/index'],],
+                            ['label' => 'Servicios', 'icon' => 'fa fa-circle-o', 'url' => ['/factura-servicios/index'],],
                         ],
                     ],
                 ],
