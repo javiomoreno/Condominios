@@ -5,7 +5,7 @@
         <!-- Sidebar user panel -->
         <div class="user-panel">
             <div class="pull-left image">
-                <img src="<?= $directoryAsset ?>/img/avatar-none.png" class="img-circle" alt="User Image"/>
+                <img src="../adminlte/dist/img/avatar-none.png" class="img-circle" alt="User Image"/>
             </div>
             <div class="pull-left info">
                 <p><?= app\models\Usuarios::findIdentity(\Yii::$app->user->getId())->nombre;?></p>

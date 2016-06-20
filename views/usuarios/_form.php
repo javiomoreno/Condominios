@@ -27,7 +27,7 @@ use yii\widgets\ActiveForm;
             </div>
             <div class="row">
               <div class="col-xs-6">
-                <?= $form->field($model, 'nombre')->textInput(['maxlength' => true])->label('Nombe de Usuario <span class="asterisco">*</span>') ?>
+                <?= $form->field($model, 'nombre')->textInput(['maxlength' => true])->label('Nombre de Usuario <span class="asterisco">*</span>') ?>
               </div>
               <div class="col-xs-6">
                 <?= $form->field($model, 'apellido')->textInput(['maxlength' => true])->label('Apellido de Usuario <span class="asterisco">*</span>') ?>
@@ -35,7 +35,7 @@ use yii\widgets\ActiveForm;
             </div>
             <div class="row">
               <div class="col-xs-6">
-                <?= $form->field($model, 'cedula')->textInput(['maxlength' => true])->label('Cedula del Usuario <span class="asterisco">*</span>') ?>
+                <?= $form->field($model, 'cedula')->textInput(['maxlength' => true])->label('Cédula del Usuario <span class="asterisco">*</span>') ?>
               </div>
               <div class="col-xs-6">
                 <?= $form->field($model, 'rif')->textInput(['maxlength' => true])->label('Rif de Usuario <span class="asterisco">*</span>') ?>

@@ -22,13 +22,13 @@ use yii\helpers\Html;
 
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <img src="<?= $directoryAsset ?>/img/avatar-none.png" class="user-image" alt="User Image"/>
+                        <img src="../adminlte/dist/img/avatar-none.png" class="user-image" alt="User Image"/>
                         <span class="hidden-xs"><?= app\models\Usuarios::findIdentity(\Yii::$app->user->getId())->nombre;?></span>
                     </a>
                     <ul class="dropdown-menu">
                         <!-- User image -->
                         <li class="user-header">
-                            <img src="<?= $directoryAsset ?>/img/avatar-none.png" class="img-circle"
+                            <img src="../adminlte/dist/img/avatar-none.png" class="img-circle"
                                  alt="User Image"/>
 
                             <p>
