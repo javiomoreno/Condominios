@@ -18,7 +18,7 @@ class FacturaGastosSearch extends FacturaGastos
     public function rules()
     {
         return [
-            [['id_factura_gastos', 'apartamentos_id_apartamento'], 'integer'],
+            [['id_factura_gastos', 'apartamentos_id_apartamento', 'estado'], 'integer'],
             [['fecha_registro', 'descripcion'], 'safe'],
             [['iva', 'total'], 'number'],
         ];
@@ -65,6 +65,7 @@ class FacturaGastosSearch extends FacturaGastos
             'fecha_registro' => $this->fecha_registro,
             'iva' => $this->iva,
             'total' => $this->total,
+            'estado' => $this->estado,
         ]);
 
         $query->andFilterWhere(['like', 'descripcion', $this->descripcion]);

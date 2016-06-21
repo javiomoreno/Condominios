@@ -3,22 +3,20 @@
 namespace app\models;
 
 use Yii;
-use app\models\Items;
 use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "factura_gastos".
  *
  * @property integer $id_factura_gastos
- * @property integer $items_id_item
  * @property integer $apartamentos_id_apartamento
  * @property string $fecha_registro
  * @property double $iva
  * @property double $total
+ * @property double $estado
  * @property string $descripcion
  *
  * @property Apartamentos $apartamentosIdApartamento
- * @property Items $itemsIdItem
  * @property FacturaGastosItems[] $facturaGastosItems
  */
 class FacturaGastos extends \yii\db\ActiveRecord
@@ -38,7 +36,7 @@ class FacturaGastos extends \yii\db\ActiveRecord
     {
         return [
             [['apartamentos_id_apartamento'], 'required'],
-            [['apartamentos_id_apartamento'], 'integer'],
+            [['apartamentos_id_apartamento', 'estado'], 'integer'],
             [['fecha_registro'], 'safe'],
             [['iva', 'total'], 'number'],
             [['descripcion'], 'string', 'max' => 250],
@@ -52,11 +50,12 @@ class FacturaGastos extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id_factura_gastos' => 'Id Factura Gastos',
-            'apartamentos_id_apartamento' => 'Apartamentos Id Apartamento',
-            'fecha_registro' => 'Fecha Registro',
+            'id_factura_gastos' => 'Código de Factura',
+            'apartamentos_id_apartamento' => 'Apartamento',
+            'fecha_registro' => 'Fecha de Registro',
             'iva' => 'Iva',
             'total' => 'Total',
+            'estado' => 'Estado',
             'descripcion' => 'Descripcion',
         ];
     }
@@ -75,6 +74,11 @@ class FacturaGastos extends \yii\db\ActiveRecord
     public function getFacturaGastosItems()
     {
         return $this->hasMany(FacturaGastosItems::className(), ['factura_gastos_id_factura_gastos' => 'id_factura_gastos']);
+    }
+
+    public static function getPropietarioPrincipal($id)
+    {
+      return UsuarioApartamentos::find()->where(['apartamentos_id_apartamento' => $id])->one();
     }
 
     public static function getListaApartamentos()

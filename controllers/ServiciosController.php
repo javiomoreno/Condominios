@@ -134,4 +134,12 @@ class ServiciosController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+    public function actionPrecio($id){
+      $opciones2 = Servicios::find()->where(['id_servicio'=>$id])->one();
+      $servicio = array(
+          "precio" => $opciones2->precio,
+      );
+      print_r(json_encode($servicio));
+    }
 }

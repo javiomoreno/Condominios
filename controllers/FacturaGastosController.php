@@ -50,13 +50,8 @@ class FacturaGastosController extends Controller
     public function actionIndex()
     {
         $this->layout ="main-admin";
-        $searchModel = new FacturaGastosSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+        $model = FacturaGastos::find()->all();
+        return $this->render('index', ['model' => $model,]);
     }
 
     /**
@@ -67,8 +62,9 @@ class FacturaGastosController extends Controller
     public function actionView($id)
     {
         $this->layout ="main-admin";
+        $model2 = FacturaGastosItems::find()->where(['factura_gastos_id_factura_gastos' => $id])->all();
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $this->findModel($id), 'model2' => $model2
         ]);
     }
 
@@ -93,6 +89,7 @@ class FacturaGastosController extends Controller
             $valid = Model::validateMultiple($modelItems) && $valid;
 
             if ($valid) {
+                $model->estado = 1;
                 $transaction = \Yii::$app->db->beginTransaction();
                 try {
                     if ($flag = $model->save(false)) {

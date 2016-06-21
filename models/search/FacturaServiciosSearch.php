@@ -18,8 +18,8 @@ class FacturaServiciosSearch extends FacturaServicios
     public function rules()
     {
         return [
-            [['id_factura_servicios', 'servicios_id_servicio', 'apartamentos_id_apartamento', 'estado'], 'integer'],
-            [['fecha_factura', 'fecha_vencimiento', 'observciones'], 'safe'],
+            [['id_factura_servicios', 'apartamentos_id_apartamento', 'estado'], 'integer'],
+            [['fecha_factura', 'observaciones'], 'safe'],
             [['iva', 'total'], 'number'],
         ];
     }
@@ -61,16 +61,14 @@ class FacturaServiciosSearch extends FacturaServicios
         // grid filtering conditions
         $query->andFilterWhere([
             'id_factura_servicios' => $this->id_factura_servicios,
-            'servicios_id_servicio' => $this->servicios_id_servicio,
             'apartamentos_id_apartamento' => $this->apartamentos_id_apartamento,
             'fecha_factura' => $this->fecha_factura,
-            'fecha_vencimiento' => $this->fecha_vencimiento,
             'iva' => $this->iva,
             'total' => $this->total,
             'estado' => $this->estado,
         ]);
 
-        $query->andFilterWhere(['like', 'observciones', $this->observciones]);
+        $query->andFilterWhere(['like', 'observaciones', $this->observaciones]);
 
         return $dataProvider;
     }

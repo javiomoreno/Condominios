@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 20-06-2016 a las 17:08:11
+-- Tiempo de generación: 22-06-2016 a las 00:28:35
 -- Versión del servidor: 10.1.13-MariaDB
 -- Versión de PHP: 5.6.21
 
@@ -28,11 +28,17 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `apartamentos` (
   `id_apartamento` int(10) UNSIGNED NOT NULL,
-  `usuarios_id_usuario_pr` int(10) UNSIGNED NOT NULL,
-  `usuarios_id_usuario_in` int(10) UNSIGNED NOT NULL,
+  `usuarios_id_usuario_in` int(10) UNSIGNED DEFAULT NULL,
   `ubicacion` varchar(250) COLLATE utf8_unicode_ci DEFAULT NULL,
   `observaciones` varchar(250) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `apartamentos`
+--
+
+INSERT INTO `apartamentos` (`id_apartamento`, `usuarios_id_usuario_in`, `ubicacion`, `observaciones`) VALUES
+(3, NULL, 'arriba segundo piso', 'esta sucio');
 
 -- --------------------------------------------------------
 
@@ -51,7 +57,8 @@ CREATE TABLE `auth_assignment` (
 --
 
 INSERT INTO `auth_assignment` (`item_name`, `user_id`, `created_at`) VALUES
-('administrador', '1', NULL);
+('administrador', '1', NULL),
+('usuario', '4', 1466469480);
 
 -- --------------------------------------------------------
 
@@ -74,7 +81,8 @@ CREATE TABLE `auth_item` (
 --
 
 INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`) VALUES
-('administrador', 1, 'Administrador del Sistema', NULL, NULL, NULL, NULL);
+('administrador', 1, 'Administrador del Sistema', NULL, NULL, NULL, NULL),
+('usuario', 1, 'Usuario del Sistema', NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -112,6 +120,15 @@ CREATE TABLE `condicionUsuarios` (
   `descricion` varchar(250) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+--
+-- Volcado de datos para la tabla `condicionUsuarios`
+--
+
+INSERT INTO `condicionUsuarios` (`id_condicionUsuario`, `nombre`, `descricion`) VALUES
+(1, 'Propietario Principal', 'Propietario Principal del Apartamento'),
+(2, 'Propietario Secundario', 'Propietario Secundario del Apartamento'),
+(3, 'Inquilino', 'Inquilino del Apartamento');
+
 -- --------------------------------------------------------
 
 --
@@ -120,13 +137,41 @@ CREATE TABLE `condicionUsuarios` (
 
 CREATE TABLE `factura_gastos` (
   `id_factura_gastos` int(10) UNSIGNED NOT NULL,
-  `items_id_item` int(10) UNSIGNED NOT NULL,
   `apartamentos_id_apartamento` int(10) UNSIGNED NOT NULL,
   `fecha_registro` date DEFAULT NULL,
   `iva` double DEFAULT NULL,
   `total` double DEFAULT NULL,
+  `estado` int(10) NOT NULL,
   `descripcion` varchar(250) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `factura_gastos`
+--
+
+INSERT INTO `factura_gastos` (`id_factura_gastos`, `apartamentos_id_apartamento`, `fecha_registro`, `iva`, `total`, `estado`, `descripcion`) VALUES
+(6, 3, '2016-06-21', 5160, 43000, 1, '');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `factura_gastos_items`
+--
+
+CREATE TABLE `factura_gastos_items` (
+  `id_factura_gastos_items` int(10) UNSIGNED NOT NULL,
+  `items_id_item` int(10) UNSIGNED NOT NULL,
+  `factura_gastos_id_factura_gastos` int(10) UNSIGNED NOT NULL,
+  `cantidad` int(10) UNSIGNED DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `factura_gastos_items`
+--
+
+INSERT INTO `factura_gastos_items` (`id_factura_gastos_items`, `items_id_item`, `factura_gastos_id_factura_gastos`, `cantidad`) VALUES
+(9, 1, 6, 2),
+(10, 2, 6, 3);
 
 -- --------------------------------------------------------
 
@@ -136,15 +181,40 @@ CREATE TABLE `factura_gastos` (
 
 CREATE TABLE `factura_servicios` (
   `id_factura_servicios` int(10) UNSIGNED NOT NULL,
-  `servicios_id_servicio` int(10) UNSIGNED NOT NULL,
   `apartamentos_id_apartamento` int(10) UNSIGNED NOT NULL,
   `fecha_factura` date DEFAULT NULL,
-  `fecha_vencimiento` date DEFAULT NULL,
   `iva` double DEFAULT NULL,
   `total` double DEFAULT NULL,
   `estado` int(10) UNSIGNED DEFAULT NULL,
-  `observciones` varchar(250) COLLATE utf8_unicode_ci DEFAULT NULL
+  `observaciones` varchar(250) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `factura_servicios`
+--
+
+INSERT INTO `factura_servicios` (`id_factura_servicios`, `apartamentos_id_apartamento`, `fecha_factura`, `iva`, `total`, `estado`, `observaciones`) VALUES
+(1, 3, '2016-06-21', 1440, 12000, NULL, '');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `factura_servicios_servicios`
+--
+
+CREATE TABLE `factura_servicios_servicios` (
+  `id_factura_servicios_servicios` int(10) UNSIGNED NOT NULL,
+  `factura_servicios_id_factura_servicios` int(10) UNSIGNED NOT NULL,
+  `servicios_id_servicio` int(10) UNSIGNED NOT NULL,
+  `cantidad` int(10) UNSIGNED DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `factura_servicios_servicios`
+--
+
+INSERT INTO `factura_servicios_servicios` (`id_factura_servicios_servicios`, `factura_servicios_id_factura_servicios`, `servicios_id_servicio`, `cantidad`) VALUES
+(1, 1, 1, 12);
 
 -- --------------------------------------------------------
 
@@ -159,6 +229,14 @@ CREATE TABLE `items` (
   `precio` double DEFAULT NULL,
   `fecha_registro` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `items`
+--
+
+INSERT INTO `items` (`id_item`, `nombre`, `descripcion`, `precio`, `fecha_registro`) VALUES
+(1, 'cerveza', 'caja de cerveza', 2000, '2016-06-21'),
+(2, 'carro', 'carro', 13000, '2016-06-21');
 
 -- --------------------------------------------------------
 
@@ -192,6 +270,13 @@ CREATE TABLE `servicios` (
   `precio` double DEFAULT NULL,
   `fecha_registro` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `servicios`
+--
+
+INSERT INTO `servicios` (`id_servicio`, `nombre`, `descripcion`, `precio`, `fecha_registro`) VALUES
+(1, 'podar el cesped', 'podar el cesped', 1000, '2016-06-21');
 
 -- --------------------------------------------------------
 
@@ -238,7 +323,28 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id_usuario`, `condicionUsuarios_id_condicionUsuario`, `tipoUsuarios_id_tipoUsuario`, `nombre`, `apellido`, `cedula`, `rif`, `correo`, `telefono`, `usuario`, `clave`) VALUES
-(1, NULL, 1, 'Administrador', NULL, '', '', NULL, NULL, 'admin', 'MTIzNDU2');
+(1, NULL, 1, 'Administrador', NULL, '', '', NULL, NULL, 'admin', 'MTIzNDU2'),
+(4, 1, 2, 'Alexis Javier', 'Moreno Urbina', '18393355', 'J-18393355-4', 'javomoreno@gmail.com', '04247082428', 'javiomoreno', 'RWxjaHV0YTE5');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `usuario_apartamentos`
+--
+
+CREATE TABLE `usuario_apartamentos` (
+  `idusuario_apartamentos` int(10) UNSIGNED NOT NULL,
+  `apartamentos_id_apartamento` int(10) UNSIGNED NOT NULL,
+  `usuarios_id_usuario_ps` int(10) UNSIGNED DEFAULT NULL,
+  `usuarios_id_usuario_pp` int(10) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `usuario_apartamentos`
+--
+
+INSERT INTO `usuario_apartamentos` (`idusuario_apartamentos`, `apartamentos_id_apartamento`, `usuarios_id_usuario_ps`, `usuarios_id_usuario_pp`) VALUES
+(2, 3, NULL, 4);
 
 --
 -- Índices para tablas volcadas
@@ -249,7 +355,6 @@ INSERT INTO `usuarios` (`id_usuario`, `condicionUsuarios_id_condicionUsuario`, `
 --
 ALTER TABLE `apartamentos`
   ADD PRIMARY KEY (`id_apartamento`),
-  ADD KEY `apartamentos_FKIndex2` (`usuarios_id_usuario_pr`),
   ADD KEY `usuarios_id_usuario_in` (`usuarios_id_usuario_in`);
 
 --
@@ -290,16 +395,30 @@ ALTER TABLE `condicionUsuarios`
 --
 ALTER TABLE `factura_gastos`
   ADD PRIMARY KEY (`id_factura_gastos`),
-  ADD KEY `factura_gastos_FKIndex1` (`apartamentos_id_apartamento`),
-  ADD KEY `factura_gastos_FKIndex2` (`items_id_item`);
+  ADD KEY `factura_gastos_FKIndex1` (`apartamentos_id_apartamento`);
+
+--
+-- Indices de la tabla `factura_gastos_items`
+--
+ALTER TABLE `factura_gastos_items`
+  ADD PRIMARY KEY (`id_factura_gastos_items`),
+  ADD KEY `factura_gastos_items_FKIndex1` (`factura_gastos_id_factura_gastos`),
+  ADD KEY `factura_gastos_items_FKIndex2` (`items_id_item`);
 
 --
 -- Indices de la tabla `factura_servicios`
 --
 ALTER TABLE `factura_servicios`
   ADD PRIMARY KEY (`id_factura_servicios`),
-  ADD KEY `factura_servicios_FKIndex1` (`apartamentos_id_apartamento`),
-  ADD KEY `factura_servicios_FKIndex2` (`servicios_id_servicio`);
+  ADD KEY `factura_servicios_FKIndex1` (`apartamentos_id_apartamento`);
+
+--
+-- Indices de la tabla `factura_servicios_servicios`
+--
+ALTER TABLE `factura_servicios_servicios`
+  ADD PRIMARY KEY (`id_factura_servicios_servicios`),
+  ADD KEY `factura_servicios_servicios_FKIndex1` (`servicios_id_servicio`),
+  ADD KEY `factura_servicios_servicios_FKIndex2` (`factura_servicios_id_factura_servicios`);
 
 --
 -- Indices de la tabla `items`
@@ -334,6 +453,15 @@ ALTER TABLE `usuarios`
   ADD KEY `usuarios_FKIndex2` (`condicionUsuarios_id_condicionUsuario`);
 
 --
+-- Indices de la tabla `usuario_apartamentos`
+--
+ALTER TABLE `usuario_apartamentos`
+  ADD PRIMARY KEY (`idusuario_apartamentos`),
+  ADD KEY `usuario_apartamentos_FKIndex1` (`usuarios_id_usuario_pp`),
+  ADD KEY `usuario_apartamentos_FKIndex2` (`usuarios_id_usuario_ps`),
+  ADD KEY `usuario_apartamentos_FKIndex3` (`apartamentos_id_apartamento`);
+
+--
 -- AUTO_INCREMENT de las tablas volcadas
 --
 
@@ -341,32 +469,42 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `apartamentos`
 --
 ALTER TABLE `apartamentos`
-  MODIFY `id_apartamento` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id_apartamento` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT de la tabla `condicionUsuarios`
 --
 ALTER TABLE `condicionUsuarios`
-  MODIFY `id_condicionUsuario` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id_condicionUsuario` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT de la tabla `factura_gastos`
 --
 ALTER TABLE `factura_gastos`
-  MODIFY `id_factura_gastos` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id_factura_gastos` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+--
+-- AUTO_INCREMENT de la tabla `factura_gastos_items`
+--
+ALTER TABLE `factura_gastos_items`
+  MODIFY `id_factura_gastos_items` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT de la tabla `factura_servicios`
 --
 ALTER TABLE `factura_servicios`
-  MODIFY `id_factura_servicios` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id_factura_servicios` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT de la tabla `factura_servicios_servicios`
+--
+ALTER TABLE `factura_servicios_servicios`
+  MODIFY `id_factura_servicios_servicios` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT de la tabla `items`
 --
 ALTER TABLE `items`
-  MODIFY `id_item` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id_item` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT de la tabla `servicios`
 --
 ALTER TABLE `servicios`
-  MODIFY `id_servicio` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id_servicio` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT de la tabla `tipoUsuarios`
 --
@@ -376,7 +514,12 @@ ALTER TABLE `tipoUsuarios`
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_usuario` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+--
+-- AUTO_INCREMENT de la tabla `usuario_apartamentos`
+--
+ALTER TABLE `usuario_apartamentos`
+  MODIFY `idusuario_apartamentos` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- Restricciones para tablas volcadas
 --
@@ -385,7 +528,6 @@ ALTER TABLE `usuarios`
 -- Filtros para la tabla `apartamentos`
 --
 ALTER TABLE `apartamentos`
-  ADD CONSTRAINT `apartamentos_ibfk_1` FOREIGN KEY (`usuarios_id_usuario_pr`) REFERENCES `usuarios` (`id_usuario`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `apartamentos_ibfk_2` FOREIGN KEY (`usuarios_id_usuario_in`) REFERENCES `usuarios` (`id_usuario`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
@@ -411,15 +553,27 @@ ALTER TABLE `auth_item_child`
 -- Filtros para la tabla `factura_gastos`
 --
 ALTER TABLE `factura_gastos`
-  ADD CONSTRAINT `factura_gastos_ibfk_1` FOREIGN KEY (`apartamentos_id_apartamento`) REFERENCES `apartamentos` (`id_apartamento`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `factura_gastos_ibfk_2` FOREIGN KEY (`items_id_item`) REFERENCES `items` (`id_item`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `factura_gastos_ibfk_1` FOREIGN KEY (`apartamentos_id_apartamento`) REFERENCES `apartamentos` (`id_apartamento`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `factura_gastos_items`
+--
+ALTER TABLE `factura_gastos_items`
+  ADD CONSTRAINT `factura_gastos_items_ibfk_1` FOREIGN KEY (`factura_gastos_id_factura_gastos`) REFERENCES `factura_gastos` (`id_factura_gastos`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `factura_gastos_items_ibfk_2` FOREIGN KEY (`items_id_item`) REFERENCES `items` (`id_item`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `factura_servicios`
 --
 ALTER TABLE `factura_servicios`
-  ADD CONSTRAINT `factura_servicios_ibfk_1` FOREIGN KEY (`apartamentos_id_apartamento`) REFERENCES `apartamentos` (`id_apartamento`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `factura_servicios_ibfk_2` FOREIGN KEY (`servicios_id_servicio`) REFERENCES `servicios` (`id_servicio`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `factura_servicios_ibfk_1` FOREIGN KEY (`apartamentos_id_apartamento`) REFERENCES `apartamentos` (`id_apartamento`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `factura_servicios_servicios`
+--
+ALTER TABLE `factura_servicios_servicios`
+  ADD CONSTRAINT `factura_servicios_servicios_ibfk_1` FOREIGN KEY (`servicios_id_servicio`) REFERENCES `servicios` (`id_servicio`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `factura_servicios_servicios_ibfk_2` FOREIGN KEY (`factura_servicios_id_factura_servicios`) REFERENCES `factura_servicios` (`id_factura_servicios`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `usuarios`
@@ -427,6 +581,14 @@ ALTER TABLE `factura_servicios`
 ALTER TABLE `usuarios`
   ADD CONSTRAINT `usuarios_ibfk_1` FOREIGN KEY (`tipoUsuarios_id_tipoUsuario`) REFERENCES `tipoUsuarios` (`id_tipoUsuario`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `usuarios_ibfk_2` FOREIGN KEY (`condicionUsuarios_id_condicionUsuario`) REFERENCES `condicionUsuarios` (`id_condicionUsuario`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `usuario_apartamentos`
+--
+ALTER TABLE `usuario_apartamentos`
+  ADD CONSTRAINT `usuario_apartamentos_ibfk_1` FOREIGN KEY (`apartamentos_id_apartamento`) REFERENCES `apartamentos` (`id_apartamento`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `usuario_apartamentos_ibfk_2` FOREIGN KEY (`usuarios_id_usuario_ps`) REFERENCES `usuarios` (`id_usuario`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `usuario_apartamentos_ibfk_3` FOREIGN KEY (`usuarios_id_usuario_pp`) REFERENCES `usuarios` (`id_usuario`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

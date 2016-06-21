@@ -11,6 +11,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
 ?>
 
 <div class="factura-gastos-form">
+  <?php $form = ActiveForm::begin(['id' => 'dynamic-form']); ?>
   <div class="box">
     <div class="box-header">
       <p class="obligatorios">
@@ -18,7 +19,6 @@ use wbraganca\dynamicform\DynamicFormWidget;
       </p>
     </div>
     <div class="box-body">
-        <?php $form = ActiveForm::begin(['id' => 'dynamic-form']); ?>
         <div class="row">
           <div class="col-lg-3">
             <?= $form->field($model, 'fecha_registro')->label('Fecha <span class="asterisco">*</span>')->widget(DatePicker::className(), ['dateFormat' => 'yyyy-MM-dd', 'options' => ['class' => 'form-control'],]) ?>
@@ -128,12 +128,16 @@ use wbraganca\dynamicform\DynamicFormWidget;
     	        </div>
         	</div>
         </div>
-        <div class="form-group">
-            <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-        </div>
-        <?php ActiveForm::end(); ?>
       </div>
     </div>
+    <div class="row">
+      <div class="col-lg-12" style="text-align: center;">
+        <div class="form-group">
+          <?= Html::submitButton('Generar Factura', ['class' => 'btn btn-primary']) ?>
+        </div>
+      </div>
+    </div>
+    <?php ActiveForm::end(); ?>
 </div>
 <script type="text/javascript">
   function cargarPropietario(id){

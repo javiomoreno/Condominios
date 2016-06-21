@@ -4,37 +4,82 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\FacturaGastos */
+/* @var $model app\models\Usuarios */
 
-$this->title = $model->id_factura_gastos;
-$this->params['breadcrumbs'][] = ['label' => 'Factura Gastos', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = "Detalle de Item";
+if ($model->apartamentosIdApartamento->usuarios_id_usuario_in) {
+  $propietari = $model->apartamentosIdApartamento->usuariosIdUsuarioIn->nombre;
+}else{
+  $propietario = $model->getPropietarioPrincipal($model->apartamentos_id_apartamento)->usuariosIdUsuarioPp->nombre;
+}
+if ($model->estado == 1) {
+  $estado = "Sin Cancelar";
+} else {
+  $estado = "Cancelada";
+};
 ?>
-<div class="factura-gastos-view">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id_factura_gastos], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id_factura_gastos], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
+<div class="usuarios-view">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+        </div>
+        <div class="box-body">
+          <?= DetailView::widget([
+            'model' => $model,
+            'attributes' => [
+              'id_factura_gastos',
+              'fecha_registro',
+              [
+                  'label' =>'Apartamento',
+                  'value' => $model->apartamentosIdApartamento->ubicacion,
+              ],
+              [
+                  'label' =>'Propietario / Inquilino',
+                  'value' => $propietario,
+              ],
+              'iva',
+              'total',
+              [
+                  'label' =>'Estado de Factura',
+                  'value' => $estado,
+              ],
             ],
-        ]) ?>
-    </p>
-
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id_factura_gastos',
-            'apartamentos_id_apartamento',
-            'fecha_registro',
-            'iva',
-            'total',
-            'descripcion',
-        ],
-    ]) ?>
-
+            ]) ?>
+          </div>
+          <div class="box-header">
+            Items
+          </div>
+          <div class="box-body">
+            <table id="dataTable" class="table table-bordered table-hover">
+              <thead>
+              <tr>
+                <th>Código</th>
+                <th>Nombre de Item</th>
+                <th>Descripción de Item</th>
+                <th>Precio de Item</th>
+              </tr>
+              </thead>
+              <tbody>
+                <?php foreach ($model2 as $value): ?>
+                  <tr class="odd gradeX">
+                      <td><?= $value->itemsIdItem->id_item;?></td>
+                      <td><?= $value->itemsIdItem->nombre;?></td>
+                      <td><?= $value->itemsIdItem->descripcion;?></td>
+                      <td><?= $value->itemsIdItem->precio;?></td>
+                  </tr>
+                <?php endforeach; ?>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12" style="text-align: center;">
+            <p>
+              <?= Html::a('Imprimir', ['update', 'id' => $model->id_factura_gastos], ['class' => 'btn btn-primary']) ?>
+            </p>
+          </div>
+        </div>
+      </div>
+  </div>
 </div>

@@ -8,7 +8,6 @@ use yii\grid\GridView;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Items';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="usuarios-index">
     <p>

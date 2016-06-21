@@ -3,22 +3,22 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "factura_servicios".
  *
  * @property integer $id_factura_servicios
- * @property integer $servicios_id_servicio
  * @property integer $apartamentos_id_apartamento
  * @property string $fecha_factura
  * @property string $fecha_vencimiento
  * @property double $iva
  * @property double $total
  * @property integer $estado
- * @property string $observciones
+ * @property string $observaciones
  *
  * @property Apartamentos $apartamentosIdApartamento
- * @property Servicios $serviciosIdServicio
+ * @property FacturaServiciosServicios[] $facturaServiciosServicios
  */
 class FacturaServicios extends \yii\db\ActiveRecord
 {
@@ -36,13 +36,12 @@ class FacturaServicios extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['servicios_id_servicio', 'apartamentos_id_apartamento'], 'required'],
-            [['servicios_id_servicio', 'apartamentos_id_apartamento', 'estado'], 'integer'],
-            [['fecha_factura', 'fecha_vencimiento'], 'safe'],
+            [['apartamentos_id_apartamento'], 'required'],
+            [['apartamentos_id_apartamento', 'estado'], 'integer'],
+            [['fecha_factura'], 'safe'],
             [['iva', 'total'], 'number'],
-            [['observciones'], 'string', 'max' => 250],
+            [['observaciones'], 'string', 'max' => 250],
             [['apartamentos_id_apartamento'], 'exist', 'skipOnError' => true, 'targetClass' => Apartamentos::className(), 'targetAttribute' => ['apartamentos_id_apartamento' => 'id_apartamento']],
-            [['servicios_id_servicio'], 'exist', 'skipOnError' => true, 'targetClass' => Servicios::className(), 'targetAttribute' => ['servicios_id_servicio' => 'id_servicio']],
         ];
     }
 
@@ -52,15 +51,13 @@ class FacturaServicios extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id_factura_servicios' => 'Id Factura Servicios',
-            'servicios_id_servicio' => 'Servicios Id Servicio',
-            'apartamentos_id_apartamento' => 'Apartamentos Id Apartamento',
-            'fecha_factura' => 'Fecha Factura',
-            'fecha_vencimiento' => 'Fecha Vencimiento',
+            'id_factura_servicios' => 'Código de Factura',
+            'apartamentos_id_apartamento' => 'Apartamento',
+            'fecha_factura' => 'Fecha de Factura',
             'iva' => 'Iva',
             'total' => 'Total',
             'estado' => 'Estado',
-            'observciones' => 'Observciones',
+            'observaciones' => 'Observaciones',
         ];
     }
 
@@ -75,8 +72,19 @@ class FacturaServicios extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getServiciosIdServicio()
+    public function getFacturaServiciosServicios()
     {
-        return $this->hasOne(Servicios::className(), ['id_servicio' => 'servicios_id_servicio']);
+        return $this->hasMany(FacturaServiciosServicios::className(), ['factura_servicios_id_factura_servicios' => 'id_factura_servicios']);
+    }
+
+    public static function getPropietarioPrincipal($id)
+    {
+      return UsuarioApartamentos::find()->where(['apartamentos_id_apartamento' => $id])->one();
+    }
+
+    public static function getListaApartamentos()
+    {
+        $opciones = Apartamentos::find()->asArray()->all();
+        return ArrayHelper::map($opciones, 'id_apartamento', 'ubicacion');
     }
 }
