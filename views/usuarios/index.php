@@ -27,6 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <th>Nombres y Apellidos</th>
                 <th>Usuario de Conexión</th>
                 <th>Tipo de Usuario</th>
+                <th>Condición de Usuario</th>
                 <th style="text-align: center;">Opciones</th>
               </tr>
               </thead>
@@ -36,7 +37,8 @@ $this->params['breadcrumbs'][] = $this->title;
                       <td><?= $value->id_usuario;?></td>
                       <td><?= $value->nombre." ".$value->apellido;?></td>
                       <td><?= $value->usuario;?></td>
-                      <td><?= $value->tipoUsuarioIdTipoUsuario->nombre;?></td>
+                      <td><?= $value->tipoUsuariosIdTipoUsuario->nombre;?></td>
+                      <td><? if($value->condicionUsuarios_id_condicionUsuario != null){echo $value->condicionUsuariosIdCondicionUsuario->nombre;} else{ echo"";}?></td>
                       <td style="text-align: center;">
                         <?= Html::a(Html::tag('span', '', ['class' => 'glyphicon glyphicon-eye-open green', 'style' => 'cursor: pointer']).'', ['usuarios/view?id='.$value->id_usuario], '' );?>
                         <?= Html::a(Html::tag('span', '', ['class' => 'glyphicon glyphicon-pencil blue', 'style' => 'cursor: pointer']).'', ['/usuarios/update?id='.$value->id_usuario], '' );?>
@@ -56,7 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
       responsive: true,
       "aoColumns": [
         { "bSortable": true },
-        null, null, null,
+        null, null, null, null,
         { "bSortable": false }
       ],
       "language": {

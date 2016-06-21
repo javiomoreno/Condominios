@@ -6,12 +6,15 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 use app\models\TipoUsuarios;
+use app\models\CondicionUsuarios;
 use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "usuarios".
  *
  * @property integer $id_usuario
+ * @property integer $condicionUsuarios_id_condicionUsuario
+ * @property integer $tipoUsuarios_id_tipoUsuario
  * @property string $nombre
  * @property string $apellido
  * @property string $cedula
@@ -20,9 +23,12 @@ use yii\helpers\ArrayHelper;
  * @property string $telefono
  * @property string $usuario
  * @property string $clave
- * @property integer $tipoUsuario_id_tipoUsuario
  *
- * @property TipoUsuarios $tipoUsuarioIdTipoUsuario
+ * @property Apartamentos[] $apartamentos
+ * @property UsuarioApartamentos[] $usuarioApartamentos
+ * @property UsuarioApartamentos[] $usuarioApartamentos0
+ * @property TipoUsuarios $tipoUsuariosIdTipoUsuario
+ * @property CondicionUsuarios $condicionUsuariosIdCondicionUsuario
  */
 class Usuarios extends ActiveRecord implements IdentityInterface
 {
@@ -40,14 +46,13 @@ class Usuarios extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['nombre', 'correo', 'telefono', 'usuario', 'clave', 'tipoUsuarios_id_tipoUsuario'], 'required'],
-            [['tipoUsuarios_id_tipoUsuario'], 'integer'],
-            [['cedula', 'rif'], 'string', 'max' => 5000],
-            [['nombre', 'apellido', 'telefono', 'usuario'], 'string', 'max' => 100],
-            [['correo'], 'string', 'max' => 200],
+            [['condicionUsuarios_id_condicionUsuario', 'tipoUsuarios_id_tipoUsuario'], 'integer'],
+            [['tipoUsuarios_id_tipoUsuario', 'cedula', 'rif'], 'required'],
+            [['nombre', 'apellido', 'correo', 'telefono', 'usuario', 'clave'], 'string', 'max' => 100],
             [['correo'], 'email'],
-            [['clave'], 'string', 'max' => 250],
+            [['cedula', 'rif'], 'string', 'max' => 50],
             [['tipoUsuarios_id_tipoUsuario'], 'exist', 'skipOnError' => true, 'targetClass' => TipoUsuarios::className(), 'targetAttribute' => ['tipoUsuarios_id_tipoUsuario' => 'id_tipoUsuario']],
+            [['condicionUsuarios_id_condicionUsuario'], 'exist', 'skipOnError' => true, 'targetClass' => CondicionUsuarios::className(), 'targetAttribute' => ['condicionUsuarios_id_condicionUsuario' => 'id_condicionUsuario']],
         ];
     }
 
@@ -58,31 +63,71 @@ class Usuarios extends ActiveRecord implements IdentityInterface
     {
         return [
             'id_usuario' => 'Id Usuario',
+            'condicionUsuarios_id_condicionUsuario' => 'Condicion Usuarios Id Condicion Usuario',
+            'condicionUsuariosIdCondicionUsuario.nombre' => 'Condición de Usuario',
+            'tipoUsuarios_id_tipoUsuario' => 'Tipo Usuarios Id Tipo Usuario',
+            'tipoUsuariosIdTipoUsuario.nombre' => 'Tipo de Usuario',
             'nombre' => 'Nombre de Usuario',
             'apellido' => 'Apellido de Usuario',
-            'cedula' => 'Cédula de Usuario',
+            'cedula' => 'Cedula de Usuario',
             'rif' => 'Rif de Usuario',
             'correo' => 'Correo de Usuario',
             'telefono' => 'Telefono de Usuario',
             'usuario' => 'Usuario de Conexión',
-            'clave' => 'Clave de Acceso',
-            'tipoUsuarios_id_tipoUsuario' => 'Tipo Usuario',
-            'tipoUsuarioIdTipoUsuario.nombre' => 'Tipo Usuario',
+            'clave' => 'Clave',
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getTipoUsuarioIdTipoUsuario()
+    public function getApartamentos()
+    {
+        return $this->hasMany(Apartamentos::className(), ['usuarios_id_usuario_in' => 'id_usuario']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUsuarioApartamentos()
+    {
+        return $this->hasMany(UsuarioApartamentos::className(), ['usuarios_id_usuario_ps' => 'id_usuario']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUsuarioApartamentos0()
+    {
+        return $this->hasMany(UsuarioApartamentos::className(), ['usuarios_id_usuario_pp' => 'id_usuario']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTipoUsuariosIdTipoUsuario()
     {
         return $this->hasOne(TipoUsuarios::className(), ['id_tipoUsuario' => 'tipoUsuarios_id_tipoUsuario']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCondicionUsuariosIdCondicionUsuario()
+    {
+        return $this->hasOne(CondicionUsuarios::className(), ['id_condicionUsuario' => 'condicionUsuarios_id_condicionUsuario']);
     }
 
     public static function getListaTipoUsuarios()
     {
         $opciones = TipoUsuarios::find()->asArray()->all();
         return ArrayHelper::map($opciones, 'id_tipoUsuario', 'nombre');
+    }
+
+    public static function getListaCondicionUsuarios()
+    {
+        $opciones = CondicionUsuarios::find()->asArray()->all();
+        return ArrayHelper::map($opciones, 'id_condicionUsuario', 'nombre');
     }
 
     public static function findIdentity($id)

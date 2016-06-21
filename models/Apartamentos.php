@@ -4,19 +4,21 @@ namespace app\models;
 
 use Yii;
 use app\models\Usuarios;
+use app\models\UsuarioApartamentos;
 use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "apartamentos".
  *
  * @property integer $id_apartamento
- * @property integer $usuarios_id_usuario
+ * @property integer $usuarios_id_usuario_in
  * @property string $ubicacion
  * @property string $observaciones
  *
- * @property Usuarios $usuariosIdUsuario
+ * @property Usuarios $usuariosIdUsuarioIn
  * @property FacturaGastos[] $facturaGastos
  * @property FacturaServicios[] $facturaServicios
+ * @property UsuarioApartamentos[] $usuarioApartamentos
  */
 class Apartamentos extends \yii\db\ActiveRecord
 {
@@ -34,10 +36,8 @@ class Apartamentos extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['usuarios_id_usuario_pr'], 'required'],
-            [['usuarios_id_usuario_pr', 'usuarios_id_usuario_in'], 'integer'],
+            [['usuarios_id_usuario_in'], 'integer'],
             [['ubicacion', 'observaciones'], 'string', 'max' => 250],
-            [['usuarios_id_usuario_pr'], 'exist', 'skipOnError' => true, 'targetClass' => Usuarios::className(), 'targetAttribute' => ['usuarios_id_usuario_pr' => 'id_usuario']],
             [['usuarios_id_usuario_in'], 'exist', 'skipOnError' => true, 'targetClass' => Usuarios::className(), 'targetAttribute' => ['usuarios_id_usuario_in' => 'id_usuario']],
         ];
     }
@@ -49,20 +49,11 @@ class Apartamentos extends \yii\db\ActiveRecord
     {
         return [
             'id_apartamento' => 'Id Apartamento',
-            'usuarios_id_usuario_pr' => 'Usuario Propietario de Apartamento',
-            'usuarios_id_usuario_in' => 'Usuario Inquilino de Apartamento',
-            'usuarios_id_usuario' => 'Usuarios Id Usuario',
+            'usuarios_id_usuario_in' => 'Usuario Inquilino',
+            'usuariosIdUsuarioIn.nombre' => 'Usuario Inquilino',
             'ubicacion' => 'Ubicacion',
             'observaciones' => 'Observaciones',
         ];
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getUsuariosIdUsuarioPr()
-    {
-        return $this->hasOne(Usuarios::className(), ['id_usuario' => 'usuarios_id_usuario_pr']);
     }
 
     /**
@@ -89,15 +80,22 @@ class Apartamentos extends \yii\db\ActiveRecord
         return $this->hasMany(FacturaServicios::className(), ['apartamentos_id_apartamento' => 'id_apartamento']);
     }
 
-    public static function getListaPropietarios()
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUsuarioApartamentos()
     {
-        $opciones = Usuarios::find()->where(['condicionUsuarios_id_condicionUsuario' => 1])->asArray()->all();
-        return ArrayHelper::map($opciones, 'id_tipoUsuario', 'nombre');
+        return $this->hasMany(UsuarioApartamentos::className(), ['apartamentos_id_apartamento' => 'id_apartamento']);
     }
 
     public static function getListaInquilinos()
     {
-      $opciones = Usuarios::find()->where(['condicionUsuarios_id_condicionUsuario' => 2])->asArray()->all();
-        return ArrayHelper::map($opciones, 'id_tipoUsuario', 'nombre');
+      $opciones = Usuarios::find()->where(['condicionUsuarios_id_condicionUsuario' => 3])->asArray()->all();
+      return ArrayHelper::map($opciones, 'id_usuario', 'nombre');
+    }
+
+    public static function getPropietarios($id)
+    {
+      return UsuarioApartamentos::find()->where(['apartamentos_id_apartamento' => $id])->one();
     }
 }

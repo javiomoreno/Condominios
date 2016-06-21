@@ -62,6 +62,7 @@ class SiteController extends Controller
             else if(\Yii::$app->user->can('usuario')){
                 return Yii::$app->getResponse()->redirect(array('/usuario/index'));
             }
+            return $this->goHome();
         }
         return $this->render('index', [
             'model' => $model,

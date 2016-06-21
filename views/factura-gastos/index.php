@@ -25,7 +25,6 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id_factura_gastos',
-            'items_id_item',
             'apartamentos_id_apartamento',
             'fecha_registro',
             'iva',

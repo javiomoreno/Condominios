@@ -44,7 +44,7 @@ class Items extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id_item' => 'Id Item',
+            'id_item' => 'Item',
             'nombre' => 'Nombre',
             'descripcion' => 'Descripcion',
             'precio' => 'Precio',

@@ -4,11 +4,13 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Usuarios;
+use app\models\UsuarioApartamentos;
 use app\models\search\UsuariosSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\helpers\BaseJson;
 
 /**
  * UsuariosController implements the CRUD actions for Usuarios model.
@@ -80,6 +82,15 @@ class UsuariosController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $model->setPassword($model->clave);
             if($model->save()){
+              $auth = \Yii::$app->authManager;
+              if ($model->tipoUsuarios_id_tipoUsuario == 1) {
+                  $role = $auth->getRole('administrador');
+                  $auth->assign($role, $model->getId());
+              }
+              else if ($model->tipoUsuarios_id_tipoUsuario == 2) {
+                  $role = $auth->getRole('usuario');
+                  $auth->assign($role, $model->getId());
+              }
               return $this->redirect(['view', 'id' => $model->id_usuario]);
             }
             else {
@@ -146,5 +157,17 @@ class UsuariosController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    public function actionPropietario($id){
+      $opciones = UsuarioApartamentos::find()->where(['apartamentos_id_apartamento' => $id])->one();
+      $opciones2 = Usuarios::find()->where(['id_usuario'=>$opciones->usuarios_id_usuario_pp])->one();
+      $propietario = array(
+          "nombre" => $opciones2->nombre,
+          "cedula" => $opciones2->cedula,
+          "rif" => $opciones2->rif,
+          "telefono" => $opciones2->telefono,
+      );
+      print_r(json_encode($propietario));
     }
 }

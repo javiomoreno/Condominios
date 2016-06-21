@@ -11,7 +11,7 @@ $this->title = 'Nuevo Apartamento';
 <div class="apartamentos-create">
 
     <?= $this->render('_form', [
-        'model' => $model,
+        'model' => $model, 'model2' => $model2,
     ]) ?>
 
 </div>

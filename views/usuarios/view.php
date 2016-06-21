@@ -18,7 +18,8 @@ $this->title = "Detalle de Usuario";
           <?= DetailView::widget([
             'model' => $model,
             'attributes' => [
-              'tipoUsuarioIdTipoUsuario.nombre',
+              'tipoUsuariosIdTipoUsuario.nombre',
+              'condicionUsuariosIdCondicionUsuario.nombre',
               'nombre',
               'apellido',
               'cedula',

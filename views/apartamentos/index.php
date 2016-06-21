@@ -24,10 +24,11 @@ $this->params['breadcrumbs'][] = $this->title;
               <thead>
               <tr>
                 <th>Código</th>
-                <th>Obsevaciones de Apartamento</th>
-                <th>Ubicación de Apartamento</th>
-                <th>Propietario de Apartamento</th>
-                <th>Inqulino de Apartamento</th>
+                <th>Obsevaciones</th>
+                <th>Ubicación</th>
+                <th>Propietario Principal</th>
+                <th>Propietario Secundario</th>
+                <th>Inqulino</th>
                 <th style="text-align: center;">Opciones</th>
               </tr>
               </thead>
@@ -35,10 +36,23 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php foreach ($model as $value): ?>
                   <tr class="odd gradeX">
                       <td><?= $value->id_apartamento;?></td>
-                      <td><?= $value->observaciones;?></td>
                       <td><?= $value->ubicacion;?></td>
-                      <td><?= $value->usuariosIdUsuarioPr->nombre;?></td>
-                      <td><?= $value->usuariosIdUsuarioIn->nombre;?></td>
+                      <td><?= $value->observaciones;?></td>
+                      <td><?= $value->getPropietarios($value->id_apartamento)->usuariosIdUsuarioPp->nombre;?></td>
+                      <td><?
+                        if($value->getPropietarios($value->id_apartamento)->usuarios_id_usuario_ps){
+                          echo $value->getPropietarios($value->id_apartamento)->usuariosIdUsuarioPs->nombre;
+                        }else{
+                          echo "";
+                        }?>
+                      </td>
+                      <td><?
+                        if($value->usuarios_id_usuario_in){
+                          echo $value->usuariosIdUsuarioIn->nombre;
+                        }else{
+                          echo "";
+                        }?>
+                      </td>
                       <td style="text-align: center;">
                         <?= Html::a(Html::tag('span', '', ['class' => 'glyphicon glyphicon-eye-open green', 'style' => 'cursor: pointer']).'', ['apartamentos/view?id='.$value->id_apartamento], '' );?>
                         <?= Html::a(Html::tag('span', '', ['class' => 'glyphicon glyphicon-pencil blue', 'style' => 'cursor: pointer']).'', ['/apartamentos/update?id='.$value->id_apartamento], '' );?>
@@ -58,7 +72,7 @@ $this->params['breadcrumbs'][] = $this->title;
       responsive: true,
       "aoColumns": [
         { "bSortable": true },
-        null, null, null, null,
+        null, null, null, null, null,
         { "bSortable": false }
       ],
       "language": {

@@ -4,10 +4,13 @@ namespace app\controllers;
 
 use Yii;
 use app\models\FacturaGastos;
+use app\models\FacturaGastosItems;
+use app\models\Model;
 use app\models\search\FacturaGastosSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 
 /**
  * FacturaGastosController implements the CRUD actions for FacturaGastos model.
@@ -20,6 +23,17 @@ class FacturaGastosController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index'],
+                'rules' => [
+                    [
+                        'actions' => ['index', 'create', 'update', 'view'],
+                        'allow' => true,
+                        'roles' => ['administrador'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -35,6 +49,7 @@ class FacturaGastosController extends Controller
      */
     public function actionIndex()
     {
+        $this->layout ="main-admin";
         $searchModel = new FacturaGastosSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -51,6 +66,7 @@ class FacturaGastosController extends Controller
      */
     public function actionView($id)
     {
+        $this->layout ="main-admin";
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -63,15 +79,45 @@ class FacturaGastosController extends Controller
      */
     public function actionCreate()
     {
-        $model = new FacturaGastos();
+        $this->layout ="main-admin";
+        $model = new FacturaGastos;
+        $modelItems = [new FacturaGastosItems];
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id_factura_gastos]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+        if ($model->load(Yii::$app->request->post())) {
+
+            $modelItems = Model::createMultiple(FacturaGastosItems::classname());
+            Model::loadMultiple($modelItems, Yii::$app->request->post());
+
+            // validate all models
+            $valid = $model->validate();
+            $valid = Model::validateMultiple($modelItems) && $valid;
+
+            if ($valid) {
+                $transaction = \Yii::$app->db->beginTransaction();
+                try {
+                    if ($flag = $model->save(false)) {
+                        foreach ($modelItems as $modelItem) {
+                            $modelItem->factura_gastos_id_factura_gastos = $model->id_factura_gastos;
+                            if (! ($flag = $modelItem->save(false))) {
+                                $transaction->rollBack();
+                                break;
+                            }
+                        }
+                    }
+                    if ($flag) {
+                        $transaction->commit();
+                        return $this->redirect(['view', 'id' => $model->id_factura_gastos]);
+                    }
+                } catch (Exception $e) {
+                    $transaction->rollBack();
+                }
+            }
         }
+
+        return $this->render('create', [
+            'model' => $model,
+            'modelItems' => (empty($modelItems)) ? [new Items] : $modelItems
+        ]);
     }
 
     /**
@@ -82,6 +128,7 @@ class FacturaGastosController extends Controller
      */
     public function actionUpdate($id)
     {
+        $this->layout ="main-admin";
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {

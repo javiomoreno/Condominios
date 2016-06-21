@@ -18,7 +18,7 @@ class FacturaGastosSearch extends FacturaGastos
     public function rules()
     {
         return [
-            [['id_factura_gastos', 'items_id_item', 'apartamentos_id_apartamento'], 'integer'],
+            [['id_factura_gastos', 'apartamentos_id_apartamento'], 'integer'],
             [['fecha_registro', 'descripcion'], 'safe'],
             [['iva', 'total'], 'number'],
         ];
@@ -61,7 +61,6 @@ class FacturaGastosSearch extends FacturaGastos
         // grid filtering conditions
         $query->andFilterWhere([
             'id_factura_gastos' => $this->id_factura_gastos,
-            'items_id_item' => $this->items_id_item,
             'apartamentos_id_apartamento' => $this->apartamentos_id_apartamento,
             'fecha_registro' => $this->fecha_registro,
             'iva' => $this->iva,

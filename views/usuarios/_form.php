@@ -24,6 +24,9 @@ use yii\widgets\ActiveForm;
               <div class="col-xs-6">
                 <?= $form->field($model, 'tipoUsuarios_id_tipoUsuario')->dropDownList($model->listaTipoUsuarios, ['prompt' => 'Seleccione Tipo de Usuario' ])->label('Tipo de Usuario <span class="asterisco">*</span>');?>
               </div>
+              <div class="col-xs-6">
+                <?= $form->field($model, 'condicionUsuarios_id_condicionUsuario')->dropDownList($model->listaCondicionUsuarios, ['prompt' => 'Seleccione Condición de Usuario' ])->label('Tipo de Usuario <span class="asterisco">*</span>');?>
+              </div>
             </div>
             <div class="row">
               <div class="col-xs-6">

@@ -3,6 +3,8 @@
 namespace app\models;
 
 use Yii;
+use app\models\Items;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "factura_gastos".
@@ -17,6 +19,7 @@ use Yii;
  *
  * @property Apartamentos $apartamentosIdApartamento
  * @property Items $itemsIdItem
+ * @property FacturaGastosItems[] $facturaGastosItems
  */
 class FacturaGastos extends \yii\db\ActiveRecord
 {
@@ -34,13 +37,12 @@ class FacturaGastos extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['items_id_item', 'apartamentos_id_apartamento'], 'required'],
-            [['items_id_item', 'apartamentos_id_apartamento'], 'integer'],
+            [['apartamentos_id_apartamento'], 'required'],
+            [['apartamentos_id_apartamento'], 'integer'],
             [['fecha_registro'], 'safe'],
             [['iva', 'total'], 'number'],
             [['descripcion'], 'string', 'max' => 250],
             [['apartamentos_id_apartamento'], 'exist', 'skipOnError' => true, 'targetClass' => Apartamentos::className(), 'targetAttribute' => ['apartamentos_id_apartamento' => 'id_apartamento']],
-            [['items_id_item'], 'exist', 'skipOnError' => true, 'targetClass' => Items::className(), 'targetAttribute' => ['items_id_item' => 'id_item']],
         ];
     }
 
@@ -51,7 +53,6 @@ class FacturaGastos extends \yii\db\ActiveRecord
     {
         return [
             'id_factura_gastos' => 'Id Factura Gastos',
-            'items_id_item' => 'Items Id Item',
             'apartamentos_id_apartamento' => 'Apartamentos Id Apartamento',
             'fecha_registro' => 'Fecha Registro',
             'iva' => 'Iva',
@@ -71,8 +72,14 @@ class FacturaGastos extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getItemsIdItem()
+    public function getFacturaGastosItems()
     {
-        return $this->hasOne(Items::className(), ['id_item' => 'items_id_item']);
+        return $this->hasMany(FacturaGastosItems::className(), ['factura_gastos_id_factura_gastos' => 'id_factura_gastos']);
+    }
+
+    public static function getListaApartamentos()
+    {
+        $opciones = Apartamentos::find()->asArray()->all();
+        return ArrayHelper::map($opciones, 'id_apartamento', 'ubicacion');
     }
 }

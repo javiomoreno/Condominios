@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\helpers\BaseJson;
 
 /**
  * ItemsController implements the CRUD actions for Items model.
@@ -133,5 +134,13 @@ class ItemsController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    public function actionPrecio($id){
+      $opciones2 = Items::find()->where(['id_item'=>$id])->one();
+      $item = array(
+          "precio" => $opciones2->precio,
+      );
+      print_r(json_encode($item));
     }
 }

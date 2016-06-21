@@ -31,10 +31,13 @@ use yii\widgets\ActiveForm;
               </div>
             </div>
             <div class="row">
-              <div class="col-xs-6">
-                <?= $form->field($model, 'usuarios_id_usuario_pr')->dropDownList($model->listaPropietarios, ['prompt' => 'Seleccione Propietario' ])->label('Propietario de Apartamento <span class="asterisco">*</span>');?>
+              <div class="col-xs-4">
+                <?= $form->field($model2, 'usuarios_id_usuario_pp')->dropDownList($model2->listaPropietariosPrincipales, ['prompt' => 'Seleccione Propietario Principal' ])->label('Propietario Principal del Apartamento <span class="asterisco">*</span>');?>
               </div>
-              <div class="col-xs-6">
+              <div class="col-xs-4">
+                <?= $form->field($model2, 'usuarios_id_usuario_ps')->dropDownList($model2->listaPropietariosSecundarios, ['prompt' => 'Seleccione Secundario Principal' ])->label('Propietario Secundario del Apartamento');?>
+              </div>
+              <div class="col-xs-4">
                 <?= $form->field($model, 'usuarios_id_usuario_in')->dropDownList($model->listaInquilinos, ['prompt' => 'Seleccione Inqilino' ])->label('Inquilino de Apartamento');?>
               </div>
             </div>

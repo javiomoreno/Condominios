@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Apartamentos;
+use app\models\UsuarioApartamentos;
 use app\models\search\ApartamentosSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -60,8 +61,9 @@ class ApartamentosController extends Controller
     public function actionView($id)
     {
         $this->layout ="main-admin";
+        $model2 = UsuarioApartamentos::find()->where(['apartamentos_id_apartamento' => $id])->one();
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $this->findModel($id), 'model2' => $model2,
         ]);
     }
 
@@ -74,12 +76,17 @@ class ApartamentosController extends Controller
     {
         $this->layout ="main-admin";
         $model = new Apartamentos();
+        $model2 = new UsuarioApartamentos();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model2->load(Yii::$app->request->post())) {
+          if ($model->save()) {
+            $model2->apartamentos_id_apartamento = $model->id_apartamento;
+            $model2->save();
             return $this->redirect(['view', 'id' => $model->id_apartamento]);
+          }
         } else {
             return $this->render('create', [
-                'model' => $model,
+                'model' => $model, 'model2' => $model2,
             ]);
         }
     }
@@ -93,13 +100,14 @@ class ApartamentosController extends Controller
     public function actionUpdate($id)
     {
         $this->layout ="main-admin";
+        $model2 = UsuarioApartamentos::find()->where(['apartamentos_id_apartamento' => $id])->one();
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id_apartamento]);
         } else {
             return $this->render('update', [
-                'model' => $model,
+                'model' => $model, 'model2' => $model2,
             ]);
         }
     }
