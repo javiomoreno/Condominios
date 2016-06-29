@@ -48,13 +48,15 @@ else{
             ]) ?>
           </div>
         </div>
-        <div class="row">
-          <div class="col-lg-12" style="text-align: center;">
-            <p>
-              <?= Html::a('Modificar', ['update', 'id' => $model->id_apartamento], ['class' => 'btn btn-primary']) ?>
-            </p>
+        <?php if (\Yii::$app->user->can('administrador')): ?>
+          <div class="row">
+            <div class="col-lg-12" style="text-align: center;">
+              <p>
+                <?= Html::a('Modificar', ['update', 'id' => $model->id_apartamento], ['class' => 'btn btn-primary']) ?>
+              </p>
+            </div>
           </div>
-        </div>
+        <?php endif; ?>
       </div>
   </div>
 </div>

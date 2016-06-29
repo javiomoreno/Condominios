@@ -49,6 +49,11 @@ class AdministradorController extends Controller
     public function actionIndex()
     {
         $this->layout ="main-admin";
+        Yii::$app->view->params['iconoAdministrador'] = 'fa fa-laptop';
+        Yii::$app->view->params['tituloAdministrador'] = 'Dashboard';
+        Yii::$app->view->params['subTituloAdministrador'] = 'Inicio';
+        Yii::$app->view->params['subTitulo2Administrador'] = '';
+        Yii::$app->view->params['linkAdministrador'] = '';
         return $this->render('index');
     }
 

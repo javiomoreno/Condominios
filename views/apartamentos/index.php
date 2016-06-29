@@ -11,9 +11,11 @@ $this->title = 'Apartamentos';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="usuarios-index">
+  <?php if (\Yii::$app->user->can('administrador')): ?>
     <p>
-        <?= Html::a(Html::tag('i', '', ['class' => 'fa fa-file']).' Nuevo Apartamento', ['create'], ['class' => 'btn btn-info'] );?>
+      <?= Html::a(Html::tag('i', '', ['class' => 'fa fa-file']).' Nuevo Apartamento', ['create'], ['class' => 'btn btn-info'] );?>
     </p>
+  <?php endif; ?>
     <div class="row">
       <div class="col-xs-12">
         <div class="box">
@@ -55,7 +57,9 @@ $this->params['breadcrumbs'][] = $this->title;
                       </td>
                       <td style="text-align: center;">
                         <?= Html::a(Html::tag('span', '', ['class' => 'glyphicon glyphicon-eye-open green', 'style' => 'cursor: pointer']).'', ['apartamentos/view?id='.$value->id_apartamento], '' );?>
-                        <?= Html::a(Html::tag('span', '', ['class' => 'glyphicon glyphicon-pencil blue', 'style' => 'cursor: pointer']).'', ['/apartamentos/update?id='.$value->id_apartamento], '' );?>
+                        <?php if (\Yii::$app->user->can('administrador')): ?>
+                          <?= Html::a(Html::tag('span', '', ['class' => 'glyphicon glyphicon-pencil blue', 'style' => 'cursor: pointer']).'', ['/apartamentos/update?id='.$value->id_apartamento], '' );?>
+                        <?php endif; ?>
                       </td>
                   </tr>
                 <?php endforeach; ?>

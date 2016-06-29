@@ -50,6 +50,11 @@ class UsuariosController extends Controller
     public function actionIndex()
     {
         $this->layout ="main-admin";
+        Yii::$app->view->params['iconoAdministrador'] = 'fa fa-group';
+        Yii::$app->view->params['tituloAdministrador'] = 'Usuarios';
+        Yii::$app->view->params['subTituloAdministrador'] = 'Lista de Usuarios';
+        Yii::$app->view->params['subTitulo2Administrador'] = '';
+        Yii::$app->view->params['linkAdministrador'] = '';
         $model = Usuarios::find()->all();
         return $this->render('index', [
             'model' => $model,
@@ -64,6 +69,11 @@ class UsuariosController extends Controller
     public function actionView($id)
     {
         $this->layout ="main-admin";
+        Yii::$app->view->params['iconoAdministrador'] = 'fa fa-group';
+        Yii::$app->view->params['tituloAdministrador'] = 'Usuarios';
+        Yii::$app->view->params['subTituloAdministrador'] = 'Lista de Usuarios';
+        Yii::$app->view->params['subTitulo2Administrador'] = 'Detalle de Usuario';
+        Yii::$app->view->params['linkAdministrador'] = 'index';
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -77,6 +87,11 @@ class UsuariosController extends Controller
     public function actionCreate()
     {
         $this->layout ="main-admin";
+        Yii::$app->view->params['iconoAdministrador'] = 'fa fa-group';
+        Yii::$app->view->params['tituloAdministrador'] = 'Usuarios';
+        Yii::$app->view->params['subTituloAdministrador'] = 'Lista de Usuarios';
+          Yii::$app->view->params['subTitulo2Administrador'] = 'Nuevo Usuario';
+        Yii::$app->view->params['linkAdministrador'] = 'index';
         $model = new Usuarios();
 
         if ($model->load(Yii::$app->request->post())) {
@@ -114,6 +129,11 @@ class UsuariosController extends Controller
     public function actionUpdate($id)
     {
         $this->layout ="main-admin";
+        Yii::$app->view->params['iconoAdministrador'] = 'fa fa-group';
+        Yii::$app->view->params['tituloAdministrador'] = 'Usuarios';
+        Yii::$app->view->params['subTituloAdministrador'] = 'Lista de Usuarios';
+        Yii::$app->view->params['subTitulo2Administrador'] = 'Modificar Usuario';
+        Yii::$app->view->params['linkAdministrador'] = 'index';
         $model = $this->findModel($id);
 
         $claveOld = $model->clave;

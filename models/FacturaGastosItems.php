@@ -23,6 +23,7 @@ class FacturaGastosItems extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+     var $precio;
     public static function tableName()
     {
         return 'factura_gastos_items';
@@ -35,7 +36,7 @@ class FacturaGastosItems extends \yii\db\ActiveRecord
     {
         return [
             [['items_id_item'], 'required'],
-            [['items_id_item', 'factura_gastos_id_factura_gastos', 'cantidad'], 'integer'],
+            [['items_id_item', 'factura_gastos_id_factura_gastos', 'cantidad', 'precio'], 'integer'],
             [['factura_gastos_id_factura_gastos'], 'exist', 'skipOnError' => true, 'targetClass' => FacturaGastos::className(), 'targetAttribute' => ['factura_gastos_id_factura_gastos' => 'id_factura_gastos']],
             [['items_id_item'], 'exist', 'skipOnError' => true, 'targetClass' => Items::className(), 'targetAttribute' => ['items_id_item' => 'id_item']],
         ];

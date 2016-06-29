@@ -1,6 +1,7 @@
 <?php
 use yii\widgets\Breadcrumbs;
 use dmstr\widgets\Alert;
+use yii\helpers\Html;
 
 ?>
 <div class="content-wrapper">
@@ -22,8 +23,13 @@ use dmstr\widgets\Alert;
         <?php } ?>
 
         <ol class="breadcrumb">
-          <li><a href="#"><i class="fa fa-laptop"></i> Dashboard</a></li>
-          <li class="active">Inicio</li>
+          <li><a href="#"><i class="fa <?= Yii::$app->view->params['iconoAdministrador']?>"></i> <?= Yii::$app->view->params['tituloAdministrador']?></a></li>
+          <?php if (Yii::$app->view->params['subTitulo2Administrador'] != ''): ?>
+            <li><?= Html::a(Yii::$app->view->params['subTituloAdministrador'].'', [Yii::$app->view->params['linkAdministrador'].''], [''] );?></li>
+            <li class="active"><?= Yii::$app->view->params['subTitulo2Administrador']?></li>
+          <?php else: ?>
+            <li class="active"><?= Yii::$app->view->params['subTituloAdministrador']?></li>
+          <?php endif; ?>
         </ol>
     </section>
 

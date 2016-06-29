@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Apartamentos;
+use app\models\Usuarios;
 use app\models\UsuarioApartamentos;
 use app\models\search\ApartamentosSearch;
 use yii\web\Controller;
@@ -24,12 +25,17 @@ class ApartamentosController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index'],
+                'only' => ['index', 'create', 'update', 'view'],
                 'rules' => [
                     [
                         'actions' => ['index', 'create', 'update', 'view'],
                         'allow' => true,
                         'roles' => ['administrador'],
+                    ],
+                    [
+                        'actions' => ['index', 'view'],
+                        'allow' => true,
+                        'roles' => ['usuario'],
                     ],
                 ],
             ],
@@ -48,8 +54,27 @@ class ApartamentosController extends Controller
      */
     public function actionIndex()
     {
-        $this->layout ="main-admin";
-        $model = Apartamentos::find()->all();
+        Yii::$app->view->params['iconoAdministrador'] = 'fa fa-home';
+        Yii::$app->view->params['tituloAdministrador'] = 'Apartamentos';
+        Yii::$app->view->params['subTituloAdministrador'] = 'Lista de Apartamentos';
+        Yii::$app->view->params['subTitulo2Administrador'] = '';
+        if (\Yii::$app->user->can('administrador')) {
+          $this->layout ="main-admin";
+          $model = Apartamentos::find()->all();
+        }
+        else if (\Yii::$app->user->can('usuario')){
+          $this->layout ="main-usuario";
+          $model1 = Usuarios::findIdentity(\Yii::$app->user->getId());
+          if ($model1->usuarios_id_usuario_in) {
+            $model = Apartamentos::find()->where(['usuarios_id_usuario_in' => \Yii::$app->user->getId()])->all();
+          }
+          else if($model1->usuarioApartamentosIdUsuarioApartamento->usuarios_id_usuario_ps){
+            $model = $db->createCommand('SELECT * FROM apartamentos WHERE id_apartamento = (SELECT apartamentos_id_apartamento FROM usuario_apartamentos WHERE usuarios_id_usuario_ps = \Yii::$app->user->getId())')->queryAll();
+          }
+          else if($model1->usuarioApartamentosIdUsuarioApartamento->usuarios_id_usuario_pp){
+            $model = Apartamentos::find()->where(['usuarios_id_usuario_in' => \Yii::$app->user->getId()])->all();
+          }
+        }
         return $this->render('index', ['model' => $model,]);
     }
 
@@ -60,7 +85,17 @@ class ApartamentosController extends Controller
      */
     public function actionView($id)
     {
-        $this->layout ="main-admin";
+        Yii::$app->view->params['iconoAdministrador'] = 'fa fa-home';
+        Yii::$app->view->params['tituloAdministrador'] = 'Apartamentos';
+        Yii::$app->view->params['subTituloAdministrador'] = 'Lista de Apartamentos';
+        Yii::$app->view->params['subTitulo2Administrador'] = 'Detalle de Apartamento';
+        Yii::$app->view->params['linkAdministrador'] = 'index';
+        if (\Yii::$app->user->can('administrador')) {
+          $this->layout ="main-admin";
+        }
+        else if (\Yii::$app->user->can('usuario')){
+          $this->layout ="main-usuario";
+        }
         $model2 = UsuarioApartamentos::find()->where(['apartamentos_id_apartamento' => $id])->one();
         return $this->render('view', [
             'model' => $this->findModel($id), 'model2' => $model2,
@@ -74,6 +109,11 @@ class ApartamentosController extends Controller
      */
     public function actionCreate()
     {
+        Yii::$app->view->params['iconoAdministrador'] = 'fa fa-home';
+        Yii::$app->view->params['tituloAdministrador'] = 'Apartamentos';
+        Yii::$app->view->params['subTituloAdministrador'] = 'Lista de Apartamentos';
+        Yii::$app->view->params['subTitulo2Administrador'] = 'Nuevo Apartamento';
+        Yii::$app->view->params['linkAdministrador'] = 'index';
         $this->layout ="main-admin";
         $model = new Apartamentos();
         $model2 = new UsuarioApartamentos();
@@ -99,6 +139,11 @@ class ApartamentosController extends Controller
      */
     public function actionUpdate($id)
     {
+        Yii::$app->view->params['iconoAdministrador'] = 'fa fa-home';
+        Yii::$app->view->params['tituloAdministrador'] = 'Apartamentos';
+        Yii::$app->view->params['subTituloAdministrador'] = 'Lista de Apartamentos';
+        Yii::$app->view->params['subTitulo2Administrador'] = 'Modificar Apartamento';
+        Yii::$app->view->params['linkAdministrador'] = 'index';
         $this->layout ="main-admin";
         $model2 = UsuarioApartamentos::find()->where(['apartamentos_id_apartamento' => $id])->one();
         $model = $this->findModel($id);

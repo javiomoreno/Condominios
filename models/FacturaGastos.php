@@ -35,7 +35,7 @@ class FacturaGastos extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['apartamentos_id_apartamento'], 'required'],
+            [['apartamentos_id_apartamento', 'fecha_registro'], 'required'],
             [['apartamentos_id_apartamento', 'estado'], 'integer'],
             [['fecha_registro'], 'safe'],
             [['iva', 'total'], 'number'],

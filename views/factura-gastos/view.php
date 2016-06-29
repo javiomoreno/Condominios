@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\Usuarios */
 
-$this->title = "Detalle de Item";
+$this->title = "Detalle de Factura de Gastos";
 if ($model->apartamentosIdApartamento->usuarios_id_usuario_in) {
   $propietari = $model->apartamentosIdApartamento->usuariosIdUsuarioIn->nombre;
 }else{
