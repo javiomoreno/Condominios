@@ -66,12 +66,22 @@ class FacturaGastosController extends Controller
      */
     public function actionView($id)
     {
-        $this->layout ="main-admin";
-        Yii::$app->view->params['iconoAdministrador'] = 'fa fa-file-text';
-        Yii::$app->view->params['tituloAdministrador'] = 'Factura de Gastos';
-        Yii::$app->view->params['subTituloAdministrador'] = 'Lista de Factura de Gastos';
-        Yii::$app->view->params['subTitulo2Administrador'] = 'Detalle de Factura de Gastos';
-        Yii::$app->view->params['linkAdministrador'] = 'index';
+        if (\Yii::$app->user->can('administrador')) {
+          $this->layout ="main-admin";
+          Yii::$app->view->params['iconoAdministrador'] = 'fa fa-file-text';
+          Yii::$app->view->params['tituloAdministrador'] = 'Factura de Gastos';
+          Yii::$app->view->params['subTituloAdministrador'] = 'Lista de Factura de Gastos';
+          Yii::$app->view->params['subTitulo2Administrador'] = 'Detalle de Factura de Gastos';
+          Yii::$app->view->params['linkAdministrador'] = 'index';
+        }
+        else if (\Yii::$app->user->can('usuario')){
+          $this->layout ="main-usuario";
+          Yii::$app->view->params['iconoAdministrador'] = 'fa fa-home';
+          Yii::$app->view->params['tituloAdministrador'] = 'Apartamentos';
+          Yii::$app->view->params['subTituloAdministrador'] = 'Lista de Apartamentos';
+          Yii::$app->view->params['subTitulo2Administrador'] = 'Detalle de Apartamento';
+          Yii::$app->view->params['linkAdministrador'] = 'apartamentos/index';
+        }
         $model2 = FacturaGastosItems::find()->where(['factura_gastos_id_factura_gastos' => $id])->all();
         return $this->render('view', [
             'model' => $this->findModel($id), 'model2' => $model2
@@ -179,5 +189,12 @@ class FacturaGastosController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    public function actionPagarFactura($id){
+        $model = $this->findModel($id);
+        $model->estado = 2;
+        $model->save();
+        return $this->redirect(['view', 'id' => $model->id_factura_gastos]);
     }
 }

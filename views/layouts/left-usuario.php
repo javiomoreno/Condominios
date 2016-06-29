@@ -20,15 +20,6 @@
                 'items' => [
                     ['label' => 'Menú', 'options' => ['class' => 'header']],
                     ['label' => 'Apartamentos', 'icon' => 'fa fa-home', 'url' => ['/apartamentos/index']],
-                    [
-                        'label' => 'Facturas',
-                        'icon' => 'fa fa-file-text',
-                        'url' => '#',
-                        'items' => [
-                            ['label' => 'Gastos', 'icon' => 'fa fa-circle-o', 'url' => ['/factura-gastos/index'],],
-                            ['label' => 'Servicios', 'icon' => 'fa fa-circle-o', 'url' => ['/factura-servicios/index'],],
-                        ],
-                    ],
                 ],
             ]
         ) ?>

@@ -6,6 +6,8 @@ use Yii;
 use app\models\Apartamentos;
 use app\models\Usuarios;
 use app\models\UsuarioApartamentos;
+use app\models\FacturaGastos;
+use app\models\FacturaServicios;
 use app\models\search\ApartamentosSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -65,13 +67,15 @@ class ApartamentosController extends Controller
         else if (\Yii::$app->user->can('usuario')){
           $this->layout ="main-usuario";
           $model1 = Usuarios::findIdentity(\Yii::$app->user->getId());
-          if ($model1->usuarios_id_usuario_in) {
-            $model = Apartamentos::find()->where(['usuarios_id_usuario_in' => \Yii::$app->user->getId()])->all();
+          if($model1->condicionUsuariosIdCondicionUsuario->id_condicionUsuario == 1){
+            $sql = "SELECT * FROM apartamentos WHERE id_apartamento IN (SELECT apartamentos_id_apartamento FROM usuario_apartamentos WHERE usuarios_id_usuario_pp = $model1->id_usuario) ORDER BY id_apartamento DESC";
+            $model = Apartamentos::findBySql($sql)->all();
           }
-          else if($model1->usuarioApartamentosIdUsuarioApartamento->usuarios_id_usuario_ps){
-            $model = $db->createCommand('SELECT * FROM apartamentos WHERE id_apartamento = (SELECT apartamentos_id_apartamento FROM usuario_apartamentos WHERE usuarios_id_usuario_ps = \Yii::$app->user->getId())')->queryAll();
+          else if($model1->condicionUsuariosIdCondicionUsuario->id_condicionUsuario == 2){
+            $sql = "SELECT * FROM apartamentos WHERE id_apartamento IN (SELECT apartamentos_id_apartamento FROM usuario_apartamentos WHERE usuarios_id_usuario_ps = $model1->id_usuario) ORDER BY id_apartamento DESC";
+            $model = Apartamentos::findBySql($sql)->all();
           }
-          else if($model1->usuarioApartamentosIdUsuarioApartamento->usuarios_id_usuario_pp){
+          else if ($model1->condicionUsuariosIdCondicionUsuario->id_condicionUsuario == 3) {
             $model = Apartamentos::find()->where(['usuarios_id_usuario_in' => \Yii::$app->user->getId()])->all();
           }
         }
@@ -97,8 +101,10 @@ class ApartamentosController extends Controller
           $this->layout ="main-usuario";
         }
         $model2 = UsuarioApartamentos::find()->where(['apartamentos_id_apartamento' => $id])->one();
+        $model3 = FacturaGastos::find()->where(['apartamentos_id_apartamento' => $id])->all();
+        $model4 = FacturaServicios::find()->where(['apartamentos_id_apartamento' => $id])->all();
         return $this->render('view', [
-            'model' => $this->findModel($id), 'model2' => $model2,
+            'model' => $this->findModel($id), 'model2' => $model2, 'model3' => $model3, 'model4' => $model4,
         ]);
     }
 
