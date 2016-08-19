@@ -18,7 +18,7 @@ AppAsset::register($this);
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?= Html::csrfMetaTags() ?>
-    <title>JHS</title>
+    <title>Factura</title>
     <?php $this->head() ?>
 </head>
 <body onload="window.print()">
@@ -30,7 +30,7 @@ AppAsset::register($this);
 </div>
 
 <footer class="footer">
-  
+
 </footer>
 
 <?php $this->endBody() ?>

@@ -6,7 +6,7 @@ use yii\bootstrap\ActiveForm;
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model \common\models\LoginForm */
 
-$this->title = 'Iniciar Sesión';
+$this->title = 'Condominios | Iniciar Sesión';
 
 $fieldOptions1 = [
     'options' => ['class' => 'form-group has-feedback'],
@@ -25,7 +25,7 @@ $fieldOptions2 = [
     </div>
     <!-- /.login-logo -->
     <div class="login-box-body">
-        <p class="login-box-msg">Ingregsa tus datos para Iniciar Sesión</p>
+        <p class="login-box-msg">Ingresa tus datos para Iniciar Sesión</p>
 
         <?php $form = ActiveForm::begin(['id' => 'login-form', 'enableClientValidation' => false]); ?>
 

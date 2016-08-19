@@ -190,19 +190,18 @@ class FacturaServiciosController extends Controller
         }
     }
 
-<<<<<<< HEAD
     public function actionViewImprimir($id){
       $this->layout ="main-imprimir";
       $model2 = FacturaServiciosServicios::find()->where(['factura_servicios_id_factura_servicios' => $id])->all();
       return $this->render('view-imprimir', [
           'model' => $this->findModel($id), 'model2' => $model2
       ]);
-=======
+    }
+
     public function actionPagarFactura($id){
         $model = $this->findModel($id);
         $model->estado = 2;
         $model->save();
         return $this->redirect(['view', 'id' => $model->id_factura_servicios]);
->>>>>>> origin/master
     }
 }
