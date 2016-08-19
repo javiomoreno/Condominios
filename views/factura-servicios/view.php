@@ -74,13 +74,31 @@ if ($model->estado == 1) {
             </table>
           </div>
         </div>
+<<<<<<< HEAD
         <div class="row">
           <div class="col-lg-12" style="text-align: center;">
             <p>
               <?= Html::a('Imprimir', ['view-imprimir', 'id' => $model->id_factura_servicios], ['class' => 'btn btn-primary', 'target' => '_blank']) ?>
             </p>
+=======
+        <?php if (\Yii::$app->user->can('administrador')): ?>
+          <div class="row">
+            <div class="col-lg-12" style="text-align: center;">
+              <p>
+                <?= Html::a('Imprimir', ['update', 'id' => $model->id_factura_servicios], ['class' => 'btn btn-primary']) ?>
+              </p>
+            </div>
+>>>>>>> origin/master
           </div>
-        </div>
+        <?php elseif(\Yii::$app->user->can('usuario') && $model->estado == 1): ?>
+          <div class="row">
+            <div class="col-lg-12" style="text-align: center;">
+              <p>
+                <?= Html::a('Pagar Factura', ['pagar-factura', 'id' => $model->id_factura_servicios], ['class' => 'btn btn-primary',]) ?>
+              </p>
+            </div>
+          </div>
+        <?php endif; ?>
       </div>
   </div>
 </div>

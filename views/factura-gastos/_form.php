@@ -116,8 +116,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
     	                                <?= $form->field($modelItem, "[{$i}]cantidad")->textInput(['class' => 'cantidad form-control', 'onblur'=>'calcularTotal()']);?>
     	                            </div>
                                   <div class="col-sm-3">
-                                    <label for="">Precio Item</label>
-                                      <?= Html::input('text', '', '', ['id' => "[{$i}]precio", 'class' => 'form-control', 'readonly' => true]) ?>
+                                    <?= $form->field($modelItem, "[{$i}]precio")->textInput(['class' => 'form-control', 'onblur'=>'calcularTotal()', 'readonly' => true]);?>
     	                            </div>
     	                        </div>
     	                    </div>
@@ -169,7 +168,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
       data: 'id='+valor.value,
       dataType: 'json',
       "success":function(data){
-        document.getElementById("[-"+id+"-]precio").value = data.precio;
+        document.getElementById("facturagastositems-"+id+"-precio").value = data.precio;
       }
     });
   }
@@ -178,7 +177,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
     var cantidad = document.getElementsByClassName('cantidad').length;
     var total = 0, iva = 0;
     for (var i = 0; i < cantidad; i++) {
-      total += document.getElementById("[-"+i+"-]precio").value * document.getElementById("facturagastositems-"+i+"-cantidad").value;
+      total += document.getElementById("facturagastositems-"+i+"-precio").value * document.getElementById("facturagastositems-"+i+"-cantidad").value;
     }
     document.getElementById("facturagastos-total").value = total;
     document.getElementById("facturagastos-iva").value = document.getElementById("facturagastos-total").value * 0.12;

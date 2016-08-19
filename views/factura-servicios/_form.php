@@ -116,8 +116,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
     	                                <?= $form->field($modelServicio, "[{$i}]cantidad")->textInput(['class' => 'cantidad form-control', 'onblur'=>'calcularTotal()']);?>
     	                            </div>
                                   <div class="col-sm-3">
-                                    <label for="">Precio Item</label>
-                                      <?= Html::input('text', '', '', ['id' => "[{$i}]precio", 'class' => 'form-control', 'readonly' => true]) ?>
+                                    <?= $form->field($modelServicio, "[{$i}]precio")->textInput(['class' => 'form-control', 'onblur'=>'calcularTotal()', 'readonly' => true]);?>
     	                            </div>
     	                        </div>
     	                    </div>
@@ -128,8 +127,12 @@ use wbraganca\dynamicform\DynamicFormWidget;
     	        </div>
         	</div>
         </div>
-        <div class="form-group">
-            <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <div class="row">
+          <div class="col-lg-12" style="text-align: center;">
+            <div class="form-group">
+              <?= Html::submitButton('Generar Factura', ['class' => 'btn btn-primary']) ?>
+            </div>
+          </div>
         </div>
         <?php ActiveForm::end(); ?>
       </div>
@@ -165,7 +168,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
       data: 'id='+valor.value,
       dataType: 'json',
       "success":function(data){
-        document.getElementById("[-"+id+"-]precio").value = data.precio;
+        document.getElementById("facturaserviciosservicios-"+id+"-precio").value = data.precio;
       }
     });
   }
@@ -174,7 +177,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
     var cantidad = document.getElementsByClassName('cantidad').length;
     var total = 0, iva = 0;
     for (var i = 0; i < cantidad; i++) {
-      total += document.getElementById("[-"+i+"-]precio").value * document.getElementById("facturaserviciosservicios-"+i+"-cantidad").value;
+      total += document.getElementById("facturaserviciosservicios-"+i+"-precio").value * document.getElementById("facturaserviciosservicios-"+i+"-cantidad").value;
     }
     document.getElementById("facturaservicios-total").value = total;
     document.getElementById("facturaservicios-iva").value = document.getElementById("facturaservicios-total").value * 0.12;

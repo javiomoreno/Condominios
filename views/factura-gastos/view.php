@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\Usuarios */
 
-$this->title = "Detalle de Item";
+$this->title = "Detalle de Factura de Gastos";
 if ($model->apartamentosIdApartamento->usuarios_id_usuario_in) {
   $propietari = $model->apartamentosIdApartamento->usuariosIdUsuarioIn->nombre;
 }else{
@@ -73,13 +73,31 @@ if ($model->estado == 1) {
             </table>
           </div>
         </div>
+<<<<<<< HEAD
         <div class="row">
           <div class="col-lg-12" style="text-align: center;">
             <p>
               <?= Html::a('Imprimir', ['view-imprimir', 'id' => $model->id_factura_gastos], ['class' => 'btn btn-primary', 'target' => '_blank']) ?>
             </p>
+=======
+        <?php if (\Yii::$app->user->can('administrador')): ?>
+          <div class="row">
+            <div class="col-lg-12" style="text-align: center;">
+              <p>
+                <?= Html::a('Imprimir', ['update', 'id' => $model->id_factura_gastos], ['class' => 'btn btn-primary']) ?>
+              </p>
+            </div>
+>>>>>>> origin/master
           </div>
-        </div>
+        <?php elseif(\Yii::$app->user->can('usuario') && $model->estado == 1): ?>
+          <div class="row">
+            <div class="col-lg-12" style="text-align: center;">
+              <p>
+                <?= Html::a('Pagar Factura', ['pagar-factura', 'id' => $model->id_factura_gastos], ['class' => 'btn btn-primary',]) ?>
+              </p>
+            </div>
+          </div>
+        <?php endif; ?>
       </div>
   </div>
 </div>

@@ -36,7 +36,7 @@ class FacturaServicios extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['apartamentos_id_apartamento'], 'required'],
+            [['apartamentos_id_apartamento', 'fecha_factura'], 'required'],
             [['apartamentos_id_apartamento', 'estado'], 'integer'],
             [['fecha_factura'], 'safe'],
             [['iva', 'total'], 'number'],

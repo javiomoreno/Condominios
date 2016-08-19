@@ -22,6 +22,7 @@ class FacturaServiciosServicios extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+     var $precio;
     public static function tableName()
     {
         return 'factura_servicios_servicios';
@@ -34,7 +35,7 @@ class FacturaServiciosServicios extends \yii\db\ActiveRecord
     {
         return [
             [['servicios_id_servicio'], 'required'],
-            [['factura_servicios_id_factura_servicios', 'servicios_id_servicio', 'cantidad'], 'integer'],
+            [['factura_servicios_id_factura_servicios', 'servicios_id_servicio', 'cantidad', 'precio'], 'integer'],
             [['servicios_id_servicio'], 'exist', 'skipOnError' => true, 'targetClass' => Servicios::className(), 'targetAttribute' => ['servicios_id_servicio' => 'id_servicio']],
             [['factura_servicios_id_factura_servicios'], 'exist', 'skipOnError' => true, 'targetClass' => FacturaServicios::className(), 'targetAttribute' => ['factura_servicios_id_factura_servicios' => 'id_factura_servicios']],
         ];

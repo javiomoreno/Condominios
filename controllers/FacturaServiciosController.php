@@ -50,6 +50,11 @@ class FacturaServiciosController extends Controller
     public function actionIndex()
     {
         $this->layout ="main-admin";
+        Yii::$app->view->params['iconoAdministrador'] = 'fa fa-file-text';
+        Yii::$app->view->params['tituloAdministrador'] = 'Factura de Servicios';
+        Yii::$app->view->params['subTituloAdministrador'] = 'Lista de Factura de Servicios';
+        Yii::$app->view->params['subTitulo2Administrador'] = '';
+        Yii::$app->view->params['linkAdministrador'] = '';
         $model = FacturaServicios::find()->all();
         return $this->render('index', ['model' => $model,]);
     }
@@ -61,7 +66,22 @@ class FacturaServiciosController extends Controller
      */
     public function actionView($id)
     {
-        $this->layout ="main-admin";
+        if (\Yii::$app->user->can('administrador')) {
+          $this->layout ="main-admin";
+          Yii::$app->view->params['iconoAdministrador'] = 'fa fa-file-text';
+          Yii::$app->view->params['tituloAdministrador'] = 'Factura de Servicios';
+          Yii::$app->view->params['subTituloAdministrador'] = 'Lista de Factura de Servicios';
+          Yii::$app->view->params['subTitulo2Administrador'] = 'Detalle de Factura de Servicio';
+          Yii::$app->view->params['linkAdministrador'] = 'index';
+        }
+        else if (\Yii::$app->user->can('usuario')){
+          $this->layout ="main-usuario";
+          Yii::$app->view->params['iconoAdministrador'] = 'fa fa-home';
+          Yii::$app->view->params['tituloAdministrador'] = 'Apartamentos';
+          Yii::$app->view->params['subTituloAdministrador'] = 'Lista de Apartamentos';
+          Yii::$app->view->params['subTitulo2Administrador'] = 'Detalle de Apartamento';
+          Yii::$app->view->params['linkAdministrador'] = 'apartamentos/index';
+        }
         $model2 = FacturaServiciosServicios::find()->where(['factura_servicios_id_factura_servicios' => $id])->all();
         return $this->render('view', [
             'model' => $this->findModel($id), 'model2' => $model2
@@ -76,6 +96,11 @@ class FacturaServiciosController extends Controller
     public function actionCreate()
     {
       $this->layout ="main-admin";
+      Yii::$app->view->params['iconoAdministrador'] = 'fa fa-file-text';
+      Yii::$app->view->params['tituloAdministrador'] = 'Factura de Servicios';
+      Yii::$app->view->params['subTituloAdministrador'] = 'Lista de Factura de Servicios';
+      Yii::$app->view->params['subTitulo2Administrador'] = 'Nueva Factura de Servicio';
+      Yii::$app->view->params['linkAdministrador'] = 'index';
       $model = new FacturaServicios;
       $modelServicios = [new FacturaServiciosServicios];
 
@@ -165,11 +190,19 @@ class FacturaServiciosController extends Controller
         }
     }
 
+<<<<<<< HEAD
     public function actionViewImprimir($id){
       $this->layout ="main-imprimir";
       $model2 = FacturaServiciosServicios::find()->where(['factura_servicios_id_factura_servicios' => $id])->all();
       return $this->render('view-imprimir', [
           'model' => $this->findModel($id), 'model2' => $model2
       ]);
+=======
+    public function actionPagarFactura($id){
+        $model = $this->findModel($id);
+        $model->estado = 2;
+        $model->save();
+        return $this->redirect(['view', 'id' => $model->id_factura_servicios]);
+>>>>>>> origin/master
     }
 }

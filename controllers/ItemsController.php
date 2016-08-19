@@ -49,6 +49,11 @@ class ItemsController extends Controller
     public function actionIndex()
     {
         $this->layout ="main-admin";
+        Yii::$app->view->params['iconoAdministrador'] = 'fa fa-check-square';
+        Yii::$app->view->params['tituloAdministrador'] = 'Items';
+        Yii::$app->view->params['subTituloAdministrador'] = 'Lista de Items';
+        Yii::$app->view->params['subTitulo2Administrador'] = '';
+        Yii::$app->view->params['linkAdministrador'] = '';
         $model = Items::find()->all();
         return $this->render('index', ['model' => $model,]);
     }
@@ -61,6 +66,11 @@ class ItemsController extends Controller
     public function actionView($id)
     {
         $this->layout ="main-admin";
+        Yii::$app->view->params['iconoAdministrador'] = 'fa fa-check-square';
+        Yii::$app->view->params['tituloAdministrador'] = 'Items';
+        Yii::$app->view->params['subTituloAdministrador'] = 'Lista de Items';
+        Yii::$app->view->params['subTitulo2Administrador'] = 'Detalle de Item';
+        Yii::$app->view->params['linkAdministrador'] = 'index';
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -74,6 +84,11 @@ class ItemsController extends Controller
     public function actionCreate()
     {
         $this->layout ="main-admin";
+        Yii::$app->view->params['iconoAdministrador'] = 'fa fa-check-square';
+        Yii::$app->view->params['tituloAdministrador'] = 'Items';
+        Yii::$app->view->params['subTituloAdministrador'] = 'Lista de Items';
+        Yii::$app->view->params['subTitulo2Administrador'] = 'Nuevo Item';
+        Yii::$app->view->params['linkAdministrador'] = 'index';
         $model = new Items();
 
         if ($model->load(Yii::$app->request->post())) {
@@ -96,6 +111,11 @@ class ItemsController extends Controller
     public function actionUpdate($id)
     {
         $this->layout ="main-admin";
+        Yii::$app->view->params['iconoAdministrador'] = 'fa fa-check-square';
+        Yii::$app->view->params['tituloAdministrador'] = 'Items';
+        Yii::$app->view->params['subTituloAdministrador'] = 'Lista de Items';
+        Yii::$app->view->params['subTitulo2Administrador'] = 'Modificar Item';
+        Yii::$app->view->params['linkAdministrador'] = 'index';
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
