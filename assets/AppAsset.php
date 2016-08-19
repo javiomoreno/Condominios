@@ -21,6 +21,7 @@ class AppAsset extends AssetBundle
         'css/site.css',
         "adminlte/plugins/datatables/dataTables.bootstrap.css",
         'css/styles.css',
+        ['css/imprimir.css', 'media' => 'print'],   
     ];
     public $js = [
     ];

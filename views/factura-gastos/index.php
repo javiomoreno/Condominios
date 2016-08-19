@@ -39,7 +39,7 @@ $this->title = 'Facturas de Gastos';
                       <td><?= $value->fecha_registro;?></td>
                       <td><?= $value->apartamentosIdApartamento->ubicacion;?></td>
                       <td>
-                        <? if ($value->apartamentosIdApartamento->usuarios_id_usuario_in) {
+                        <?php if ($value->apartamentosIdApartamento->usuarios_id_usuario_in) {
                           echo $value->apartamentosIdApartamento->usuariosIdUsuarioIn->nombre;
                         }else{
                           echo $value->getPropietarioPrincipal($value->apartamentos_id_apartamento)->usuariosIdUsuarioPp->nombre;
@@ -47,10 +47,10 @@ $this->title = 'Facturas de Gastos';
                       </td>
                       <td><?= $value->iva;?></td>
                       <td><?= $value->total;?></td>
-                      <td><?if ($value->estado == 1) {echo "Sin Cancelar";} else {echo "Cancelada";};?></td>
+                      <td><?php if ($value->estado == 1) {echo "Sin Cancelar";} else {echo "Cancelada";};?></td>
                       <td style="text-align: center;">
                         <?= Html::a(Html::tag('span', '', ['class' => 'glyphicon glyphicon-eye-open green', 'style' => 'cursor: pointer']).'', ['factura-gastos/view?id='.$value->id_factura_gastos], ['title' => 'Ver Factura de Gastos'] );?>
-                        <?= Html::a(Html::tag('span', '', ['class' => 'fa fa-print', 'style' => 'cursor: pointer']).'', ['/factura-gastos/update?id='.$value->id_factura_gastos], ['title' => 'Imprimir Factura de Gastos'] );?>
+                        <?= Html::a(Html::tag('span', '', ['class' => 'fa fa-print', 'style' => 'cursor: pointer']).'', ['/factura-gastos/view-imprimir?id='.$value->id_factura_gastos], ['title' => 'Imprimir Factura de Gastos', 'target' => '_blank'] );?>
                       </td>
                   </tr>
                 <?php endforeach; ?>

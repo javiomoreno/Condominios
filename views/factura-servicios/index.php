@@ -39,7 +39,7 @@ $this->title = 'Facturas de Servicios';
                       <td><?= $value->fecha_factura;?></td>
                       <td><?= $value->apartamentosIdApartamento->ubicacion;?></td>
                       <td>
-                        <? if ($value->apartamentosIdApartamento->usuarios_id_usuario_in) {
+                        <?php if ($value->apartamentosIdApartamento->usuarios_id_usuario_in) {
                           echo $value->apartamentosIdApartamento->usuariosIdUsuarioIn->nombre;
                         }else{
                           echo $value->getPropietarioPrincipal($value->apartamentos_id_apartamento)->usuariosIdUsuarioPp->nombre;
@@ -47,10 +47,10 @@ $this->title = 'Facturas de Servicios';
                       </td>
                       <td><?= $value->iva;?></td>
                       <td><?= $value->total;?></td>
-                      <td><?if ($value->estado == 1) {echo "Sin Cancelar";} else {echo "Cancelada";};?></td>
+                      <td><?php if ($value->estado == 1) {echo "Sin Cancelar";} else {echo "Cancelada";};?></td>
                       <td style="text-align: center;">
-                        <?= Html::a(Html::tag('span', '', ['class' => 'glyphicon glyphicon-eye-open green', 'style' => 'cursor: pointer']).'', ['factura-servicios/view?id='.$value->id_factura_servicios], ['title' => 'Ver Factura de Gastos'] );?>
-                        <?= Html::a(Html::tag('span', '', ['class' => 'fa fa-print', 'style' => 'cursor: pointer']).'', ['/factura-servicios/update?id='.$value->id_factura_servicios], ['title' => 'Imprimir Factura de Gastos'] );?>
+                        <?= Html::a(Html::tag('span', '', ['class' => 'glyphicon glyphicon-eye-open green', 'style' => 'cursor: pointer']).'', ['factura-servicios/view?id='.$value->id_factura_servicios], ['title' => 'Ver Factura de Servicios'] );?>
+                        <?= Html::a(Html::tag('span', '', ['class' => 'fa fa-print', 'style' => 'cursor: pointer']).'', ['/factura-servicios/view-imprimir?id='.$value->id_factura_servicios], ['title' => 'Imprimir Factura de Servicios',  'target' => '_blank'] );?>
                       </td>
                   </tr>
                 <?php endforeach; ?>

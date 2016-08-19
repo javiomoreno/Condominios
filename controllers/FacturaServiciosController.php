@@ -164,4 +164,12 @@ class FacturaServiciosController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+    public function actionViewImprimir($id){
+      $this->layout ="main-imprimir";
+      $model2 = FacturaServiciosServicios::find()->where(['factura_servicios_id_factura_servicios' => $id])->all();
+      return $this->render('view-imprimir', [
+          'model' => $this->findModel($id), 'model2' => $model2
+      ]);
+    }
 }

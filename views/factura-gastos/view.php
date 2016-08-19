@@ -76,7 +76,7 @@ if ($model->estado == 1) {
         <div class="row">
           <div class="col-lg-12" style="text-align: center;">
             <p>
-              <?= Html::a('Imprimir', ['update', 'id' => $model->id_factura_gastos], ['class' => 'btn btn-primary']) ?>
+              <?= Html::a('Imprimir', ['view-imprimir', 'id' => $model->id_factura_gastos], ['class' => 'btn btn-primary', 'target' => '_blank']) ?>
             </p>
           </div>
         </div>

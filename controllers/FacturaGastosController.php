@@ -165,4 +165,12 @@ class FacturaGastosController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+    public function actionViewImprimir($id){
+      $this->layout ="main-imprimir";
+      $model2 = FacturaGastosItems::find()->where(['factura_gastos_id_factura_gastos' => $id])->all();
+      return $this->render('view-imprimir', [
+          'model' => $this->findModel($id), 'model2' => $model2
+      ]);
+    }
 }

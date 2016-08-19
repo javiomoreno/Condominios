@@ -39,12 +39,12 @@ $this->params['breadcrumbs'][] = $this->title;
                       <td><?= $value->ubicacion;?></td>
                       <td><?= $value->observaciones;?></td>
                       <td><?= $value->getPropietarios($value->id_apartamento)->usuariosIdUsuarioPp->nombre;?></td>
-                      <td><?
-                        if($value->getPropietarios($value->id_apartamento)->usuarios_id_usuario_ps){
-                          echo $value->getPropietarios($value->id_apartamento)->usuariosIdUsuarioPs->nombre;
-                        }else{
-                          echo "";
-                        }?>
+                      <td>
+                        <?php if ($value->getPropietarios($value->id_apartamento)->usuarios_id_usuario_ps): ?>
+                          <?= $value->getPropietarios($value->id_apartamento)->usuariosIdUsuarioPs->nombre;?>
+                        <?php else: ?>
+                          <?= "";?>
+                        <?php endif; ?>
                       </td>
                       <td><?
                         if($value->usuarios_id_usuario_in){

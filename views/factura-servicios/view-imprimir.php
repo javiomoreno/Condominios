@@ -19,12 +19,43 @@ if ($model->estado == 1) {
   $estado = "Cancelada";
 };
 ?>
-<div class="usuarios-view">
-  <div class="row">
-    <div class="col-xs-12">
-      <div class="box">
-        <div class="box-header">
-        </div>
+<style media="screen">
+body {
+  color: #000;
+  font-family: Verdana, Geneva, sans-serif;
+  font-size: 13px;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: 400;
+  line-height: 18.5714px;
+}
+
+#breadcrumbs, a, #boton{
+  display: none !important;
+}
+
+.wrap > .container {
+  margin-top: 0px !important;
+  padding-top: 0px !important;
+}
+
+.box{
+  border-top: 3px solid #fff !important;
+}
+
+.footer{
+  background-color: #fff;
+   border-top: 1px solid #fff;
+}
+
+</style>
+<div class="row cuerpo">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-header" style="text-align:center">
+        <h2>Descripción de Factura</h2>
+        <h3>Factura de Servicios</h3><br><br>
+      </div>
         <div class="box-body">
           <?= DetailView::widget([
             'model' => $model,
@@ -77,7 +108,7 @@ if ($model->estado == 1) {
         <div class="row">
           <div class="col-lg-12" style="text-align: center;">
             <p>
-              <?= Html::a('Imprimir', ['view-imprimir', 'id' => $model->id_factura_servicios], ['class' => 'btn btn-primary', 'target' => '_blank']) ?>
+              <?= Html::a('Imprimir', ['update', 'id' => $model->id_factura_servicios], ['class' => 'btn btn-primary']) ?>
             </p>
           </div>
         </div>

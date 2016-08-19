@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use app\models\Usuarios;
+use yii\bootstrap\Modal;
 
 $this->title = 'Dashboard';
 $usuario =  Usuarios::findIdentity(\Yii::$app->user->getId());
@@ -97,3 +98,41 @@ $usuario =  Usuarios::findIdentity(\Yii::$app->user->getId());
   <div class="col-lg-1">
   </div>
 </div>
+
+<?php
+  Modal::begin([
+      'header' => '<h2>Duplicar Solicitud</h2>',
+      'id' => 'modal-duplicar',
+      'size' => 'modal-md',
+      'footer' => ''.Html::button('Cancelar', ['class' => 'btn btn-sm btn-warning', 'data-dismiss'=>'modal']). Html::a('Aceptar', [''], ['class' => 'btn btn-sm btn-success']),]);
+
+  echo "¿Seguro desea duplicar la solicitud?";
+
+  Modal::end();
+?>
+<?php
+  $this->registerJs("
+    $(document).on('click', '.showModalButton', function(){
+        if ($('#modal').data('bs.modal').isShown) {
+            $('#modal').find('#modalContent')
+                    .load($(this).attr('value'));
+        } else {
+            $('#modal').modal('show')
+                    .find('#modalContent')
+                    .load($(this).attr('value'));
+        }
+    });
+    $(document).on('click', '.showModalDuplicarButton', function(){
+        if ($('#modal-duplicar').data('bs.modal').isShown) {
+            $('#modal-duplicar').find('#modalContent')
+                    .load($(this).attr('value'));
+        } else {
+            $('#modal-duplicar').modal('show')
+                    .find('#modalDuplicarContent')
+                    .load($(this).attr('value'));
+        }
+    });
+    $('[data-rel=tooltip]').tooltip();
+    $('[data-rel=popover]').popover({html:true});
+  ");
+?>
