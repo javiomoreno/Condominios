@@ -28,8 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <th>Código</th>
                 <th>Obsevaciones</th>
                 <th>Ubicación</th>
-                <th>Propietario Principal</th>
-                <th>Propietario Secundario</th>
+                <th>Propietario</th>
                 <th>Inqulino</th>
                 <th style="text-align: center;">Opciones</th>
               </tr>
@@ -40,15 +39,14 @@ $this->params['breadcrumbs'][] = $this->title;
                       <td><?= $value->id_apartamento;?></td>
                       <td><?= $value->ubicacion;?></td>
                       <td><?= $value->observaciones;?></td>
-                      <td><?= $value->getPropietarios($value->id_apartamento)->usuariosIdUsuarioPp->nombre;?></td>
-                      <td>
-                        <?php if ($value->getPropietarios($value->id_apartamento)->usuarios_id_usuario_ps): ?>
-                          <?= $value->getPropietarios($value->id_apartamento)->usuariosIdUsuarioPs->nombre;?>
-                        <?php else: ?>
-                          <?= "";?>
-                        <?php endif; ?>
+                      <td><?php
+                        if($value->usuarios_id_usuario_pr){
+                          echo $value->usuariosIdUsuarioPr->nombre;
+                        }else{
+                          echo "";
+                        }?>
                       </td>
-                      <td><?
+                      <td><?php
                         if($value->usuarios_id_usuario_in){
                           echo $value->usuariosIdUsuarioIn->nombre;
                         }else{
@@ -76,7 +74,7 @@ $this->params['breadcrumbs'][] = $this->title;
       responsive: true,
       "aoColumns": [
         { "bSortable": true },
-        null, null, null, null, null,
+        null, null, null, null,
         { "bSortable": false }
       ],
       "language": {

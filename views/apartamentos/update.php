@@ -10,7 +10,7 @@ $this->title = 'Modificar Apartamento #: ' . $model->id_apartamento;
 <div class="apartamentos-update">
 
     <?= $this->render('_form', [
-        'model' => $model, 'model2' => $model2,
+        'model' => $model
     ]) ?>
 
 </div>

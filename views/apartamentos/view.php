@@ -7,17 +7,17 @@ use yii\widgets\DetailView;
 /* @var $model app\models\Usuarios */
 
 $this->title = "Detalle de Apartamento";
-if($model2->usuarios_id_usuario_ps != null){
-  $ps = $model2->usuariosIdUsuarioPs->nombre;
-}
-else{
-  $ps = "";
-}
 if($model->usuarios_id_usuario_in != null){
   $in = $model->usuariosIdUsuarioIn->nombre;
 }
 else{
   $in = "";
+}
+if($model->usuarios_id_usuario_pr != null){
+  $pr = $model->usuariosIdUsuarioPr->nombre;
+}
+else{
+  $pr = "";
 }
 ?>
 <div class="usuarios-view">
@@ -33,12 +33,8 @@ else{
               'ubicacion',
               'observaciones',
               [                      // the owner name of the model
-                'label' => 'Propietario Principal',
-                'value' => $model2->usuariosIdUsuarioPp->nombre,
-              ],
-              [                      // the owner name of the model
-                'label' => 'Propietario Secundario',
-                'value' => $ps,
+                'label' => 'Propietario',
+                'value' => $pr,
               ],
               [                      // the owner name of the model
                 'label' => 'Inquilino',

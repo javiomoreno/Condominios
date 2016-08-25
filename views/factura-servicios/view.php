@@ -7,10 +7,16 @@ use yii\widgets\DetailView;
 /* @var $model app\models\Usuarios */
 
 $this->title = "Detalle de Servicio";
-if ($model->apartamentosIdApartamento->usuarios_id_usuario_in) {
-  $propietario = $model->apartamentosIdApartamento->usuariosIdUsuarioIn->nombre;
-}else{
-  $propietario = $model->getPropietarioPrincipal($model->apartamentos_id_apartamento)->usuariosIdUsuarioPp->nombre;
+if ($model->todos == 1) {
+  $propietario = "";
+  $apartamento = "todos";
+}
+else {
+  if ($model->apartamentosIdApartamento->usuarios_id_usuario_in) {
+    $propietario = $model->apartamentosIdApartamento->usuariosIdUsuarioIn->nombre;
+  }else{
+    $propietario = $model->apartamentosIdApartamento->usuariosIdUsuarioPr->nombre;
+  }
 }
 
 if ($model->estado == 1) {
@@ -33,7 +39,7 @@ if ($model->estado == 1) {
               'fecha_factura',
               [
                   'label' =>'Apartamento',
-                  'value' => $model->apartamentosIdApartamento->ubicacion,
+                  'value' => $apartamento,
               ],
               [
                   'label' =>'Propietario / Inquilino',
@@ -74,21 +80,14 @@ if ($model->estado == 1) {
             </table>
           </div>
         </div>
-<<<<<<< HEAD
-        <div class="row">
-          <div class="col-lg-12" style="text-align: center;">
-            <p>
-              <?= Html::a('Imprimir', ['view-imprimir', 'id' => $model->id_factura_servicios], ['class' => 'btn btn-primary', 'target' => '_blank']) ?>
-            </p>
-=======
+
         <?php if (\Yii::$app->user->can('administrador')): ?>
           <div class="row">
-            <div class="col-lg-12" style="text-align: center;">
-              <p>
-                <?= Html::a('Imprimir', ['update', 'id' => $model->id_factura_servicios], ['class' => 'btn btn-primary']) ?>
-              </p>
-            </div>
->>>>>>> origin/master
+              <div class="col-lg-12" style="text-align: center;">
+                <p>
+                  <?= Html::a('Imprimir', ['view-imprimir', 'id' => $model->id_factura_servicios], ['class' => 'btn btn-primary', 'target' => '_blank']) ?>
+                </p>
+              </div>
           </div>
         <?php elseif(\Yii::$app->user->can('usuario') && $model->estado == 1): ?>
           <div class="row">

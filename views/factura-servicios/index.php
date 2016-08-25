@@ -25,7 +25,7 @@ $this->title = 'Facturas de Servicios';
                 <th>Código</th>
                 <th>Fecha</th>
                 <th>Apartamento</th>
-                <th>Propietio / Inquilino</th>
+                <th>Propietario / Inquilino</th>
                 <th>Iva</th>
                 <th>Total</th>
                 <th>Estado de Factura</th>
@@ -37,13 +37,28 @@ $this->title = 'Facturas de Servicios';
                   <tr class="odd gradeX">
                       <td><?= $value->id_factura_servicios;?></td>
                       <td><?= $value->fecha_factura;?></td>
-                      <td><?= $value->apartamentosIdApartamento->ubicacion;?></td>
                       <td>
-                        <?php if ($value->apartamentosIdApartamento->usuarios_id_usuario_in) {
-                          echo $value->apartamentosIdApartamento->usuariosIdUsuarioIn->nombre;
-                        }else{
-                          echo $value->getPropietarioPrincipal($value->apartamentos_id_apartamento)->usuariosIdUsuarioPp->nombre;
+                        <?php
+                        if ($value->todos == 1) {
+                          echo "todos";
+                        } else {
+                          echo $value->apartamentosIdApartamento->ubicacion;
                         }?>
+                      </td>
+                      <td>
+                        <?php
+                        if ($value->todos == 1) {
+                          echo "todos";
+                        } else {
+                          if ($value->apartamentosIdApartamento->usuarios_id_usuario_pr){
+                            echo $value->apartamentosIdApartamento->usuariosIdUsuarioPr->nombre;
+                          }
+                          if ($value->apartamentosIdApartamento->usuarios_id_usuario_in) {
+                            echo " / ".$value->apartamentosIdApartamento->usuariosIdUsuarioIn->nombre;
+                          }
+                        }?>
+                        <?php
+                        ?>
                       </td>
                       <td><?= $value->iva;?></td>
                       <td><?= $value->total;?></td>

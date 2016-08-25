@@ -27,7 +27,10 @@ use wbraganca\dynamicform\DynamicFormWidget;
 
         <div class="row">
           <div class="col-lg-6">
-            <?= $form->field($model, "apartamentos_id_apartamento")->dropDownList($model->listaApartamentos, ['onchange'=>'cargarPropietario(this.value)', 'prompt' => 'Seleccione Apartamento' ]);?>
+            <?= $form->field($model, "check")->checkBox(['value' => false]);?>
+            <div class="lista">
+              <?= $form->field($model, "apartamentos_id_apartamento")->dropDownList($model->listaApartamentos, ['onchange'=>'cargarPropietario(this.value)', 'prompt' => 'Seleccione Apartamento' ]);?>
+            </div>
           </div>
         </div>
 
@@ -139,6 +142,19 @@ use wbraganca\dynamicform\DynamicFormWidget;
     </div>
 </div>
 <script type="text/javascript">
+  $(document).ready(function() {
+    document.getElementsByClassName('lista')[0].style.display = 'none';
+  })
+
+  document.getElementById('facturaservicios-check').onclick = function() {
+      if ( this.checked ) {
+        document.getElementsByClassName('datos')[0].style.display = 'none';
+        document.getElementsByClassName('lista')[0].style.display = 'none';
+      } else {
+        document.getElementsByClassName('datos')[0].style.display = 'none'
+        document.getElementsByClassName('lista')[0].style.display = 'block';
+      }
+  };
   function cargarPropietario(id){
     if(id){
       $.ajax({

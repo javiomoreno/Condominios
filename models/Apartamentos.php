@@ -36,7 +36,7 @@ class Apartamentos extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['usuarios_id_usuario_in'], 'integer'],
+            [['usuarios_id_usuario_in', 'usuarios_id_usuario_pr'], 'integer'],
             [['ubicacion', 'observaciones'], 'string', 'max' => 250],
             [['usuarios_id_usuario_in'], 'exist', 'skipOnError' => true, 'targetClass' => Usuarios::className(), 'targetAttribute' => ['usuarios_id_usuario_in' => 'id_usuario']],
         ];
@@ -50,7 +50,9 @@ class Apartamentos extends \yii\db\ActiveRecord
         return [
             'id_apartamento' => 'Id Apartamento',
             'usuarios_id_usuario_in' => 'Usuario Inquilino',
+            'usuarios_id_usuario_pr' => 'Usuario Propietario',
             'usuariosIdUsuarioIn.nombre' => 'Usuario Inquilino',
+            'usuariosIdUsuarioPr.nombre' => 'Usuario Propietario',
             'ubicacion' => 'Ubicacion',
             'observaciones' => 'Observaciones',
         ];
@@ -62,6 +64,14 @@ class Apartamentos extends \yii\db\ActiveRecord
     public function getUsuariosIdUsuarioIn()
     {
         return $this->hasOne(Usuarios::className(), ['id_usuario' => 'usuarios_id_usuario_in']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUsuariosIdUsuarioPr()
+    {
+        return $this->hasOne(Usuarios::className(), ['id_usuario' => 'usuarios_id_usuario_pr']);
     }
 
     /**
@@ -83,19 +93,22 @@ class Apartamentos extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUsuarioApartamentos()
+    public function getFacturaServiciosApartamentos()
     {
-        return $this->hasMany(UsuarioApartamentos::className(), ['apartamentos_id_apartamento' => 'id_apartamento']);
+        return $this->hasMany(FacturaServiciosApartamentos::className(), ['apartamentos_id_apartamento' => 'id_apartamento']);
     }
+
 
     public static function getListaInquilinos()
     {
-      $opciones = Usuarios::find()->where(['condicionUsuarios_id_condicionUsuario' => 3])->asArray()->all();
+      $opciones = Usuarios::find()->where(['condicionUsuarios_id_condicionUsuario' => 2])->asArray()->all();
       return ArrayHelper::map($opciones, 'id_usuario', 'nombre');
     }
 
-    public static function getPropietarios($id)
+    public static function getListaPropietarios()
     {
-      return UsuarioApartamentos::find()->where(['apartamentos_id_apartamento' => $id])->one();
+      $opciones = Usuarios::find()->where(['condicionUsuarios_id_condicionUsuario' => 1])->asArray()->all();
+      return ArrayHelper::map($opciones, 'id_usuario', 'nombre');
     }
+
 }

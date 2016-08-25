@@ -4,7 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Usuarios;
-use app\models\UsuarioApartamentos;
+use app\models\Apartamentos;
 use app\models\search\UsuariosSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -180,8 +180,8 @@ class UsuariosController extends Controller
     }
 
     public function actionPropietario($id){
-      $opciones = UsuarioApartamentos::find()->where(['apartamentos_id_apartamento' => $id])->one();
-      $opciones2 = Usuarios::find()->where(['id_usuario'=>$opciones->usuarios_id_usuario_pp])->one();
+      $opciones = Apartamentos::find()->where(['id_apartamento' => $id])->one();
+      $opciones2 = Usuarios::find()->where(['id_usuario'=>$opciones->usuarios_id_usuario_pr])->one();
       $propietario = array(
           "nombre" => $opciones2->nombre,
           "cedula" => $opciones2->cedula,

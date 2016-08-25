@@ -5,9 +5,9 @@ namespace app\controllers;
 use Yii;
 use app\models\Apartamentos;
 use app\models\Usuarios;
-use app\models\UsuarioApartamentos;
 use app\models\FacturaGastos;
 use app\models\FacturaServicios;
+use app\models\FacturaServiciosApartamentos;
 use app\models\search\ApartamentosSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -68,15 +68,12 @@ class ApartamentosController extends Controller
           $this->layout ="main-usuario";
           $model1 = Usuarios::findIdentity(\Yii::$app->user->getId());
           if($model1->condicionUsuariosIdCondicionUsuario->id_condicionUsuario == 1){
-            $sql = "SELECT * FROM apartamentos WHERE id_apartamento IN (SELECT apartamentos_id_apartamento FROM usuario_apartamentos WHERE usuarios_id_usuario_pp = $model1->id_usuario) ORDER BY id_apartamento DESC";
+            $sql = "SELECT * FROM apartamentos WHERE usuarios_id_usuario_pr = $model1->id_usuario ORDER BY id_apartamento DESC";
             $model = Apartamentos::findBySql($sql)->all();
           }
           else if($model1->condicionUsuariosIdCondicionUsuario->id_condicionUsuario == 2){
-            $sql = "SELECT * FROM apartamentos WHERE id_apartamento IN (SELECT apartamentos_id_apartamento FROM usuario_apartamentos WHERE usuarios_id_usuario_ps = $model1->id_usuario) ORDER BY id_apartamento DESC";
+            $sql = "SELECT * FROM apartamentos WHERE usuarios_id_usuario_in = $model1->id_usuario  ORDER BY id_apartamento DESC";
             $model = Apartamentos::findBySql($sql)->all();
-          }
-          else if ($model1->condicionUsuariosIdCondicionUsuario->id_condicionUsuario == 3) {
-            $model = Apartamentos::find()->where(['usuarios_id_usuario_in' => \Yii::$app->user->getId()])->all();
           }
         }
         return $this->render('index', ['model' => $model,]);
@@ -100,11 +97,16 @@ class ApartamentosController extends Controller
         else if (\Yii::$app->user->can('usuario')){
           $this->layout ="main-usuario";
         }
-        $model2 = UsuarioApartamentos::find()->where(['apartamentos_id_apartamento' => $id])->one();
         $model3 = FacturaGastos::find()->where(['apartamentos_id_apartamento' => $id])->all();
-        $model4 = FacturaServicios::find()->where(['apartamentos_id_apartamento' => $id])->all();
+        $modelfsa = FacturaServiciosApartamentos::find()->where(['apartamentos_id' => $id])->one();
+        if (count($modelfsa) != 0) {
+          $model4 = FacturaServicios::find()->where(['id_factura_servicios' => $modelfsa->factura_servicios_id])->all();
+        }
+        else {
+          $model4 = "";
+        }
         return $this->render('view', [
-            'model' => $this->findModel($id), 'model2' => $model2, 'model3' => $model3, 'model4' => $model4,
+            'model' => $this->findModel($id), 'model3' => $model3, 'model4' => $model4,
         ]);
     }
 
@@ -122,17 +124,14 @@ class ApartamentosController extends Controller
         Yii::$app->view->params['linkAdministrador'] = 'index';
         $this->layout ="main-admin";
         $model = new Apartamentos();
-        $model2 = new UsuarioApartamentos();
 
-        if ($model->load(Yii::$app->request->post()) && $model2->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post())) {
           if ($model->save()) {
-            $model2->apartamentos_id_apartamento = $model->id_apartamento;
-            $model2->save();
             return $this->redirect(['view', 'id' => $model->id_apartamento]);
           }
         } else {
             return $this->render('create', [
-                'model' => $model, 'model2' => $model2,
+                'model' => $model,
             ]);
         }
     }
@@ -151,14 +150,13 @@ class ApartamentosController extends Controller
         Yii::$app->view->params['subTitulo2Administrador'] = 'Modificar Apartamento';
         Yii::$app->view->params['linkAdministrador'] = 'index';
         $this->layout ="main-admin";
-        $model2 = UsuarioApartamentos::find()->where(['apartamentos_id_apartamento' => $id])->one();
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id_apartamento]);
         } else {
             return $this->render('update', [
-                'model' => $model, 'model2' => $model2,
+                'model' => $model
             ]);
         }
     }

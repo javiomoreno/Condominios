@@ -5,6 +5,8 @@ namespace app\controllers;
 use Yii;
 use app\models\FacturaServicios;
 use app\models\FacturaServiciosServicios;
+use app\models\FacturaServiciosApartamentos;
+use app\models\Apartamentos;
 use app\models\Model;
 use app\models\search\FacturaServiciosSearch;
 use yii\web\Controller;
@@ -104,9 +106,7 @@ class FacturaServiciosController extends Controller
       $model = new FacturaServicios;
       $modelServicios = [new FacturaServiciosServicios];
 
-      if ($model->load(Yii::$app->request->post())) {
-
-          $modelServicios = Model::createMultiple(FacturaServiciosServicios::classname());
+      if ($model->load(Yii::$app->request->post())) {$modelServicios = Model::createMultiple(FacturaServiciosServicios::classname());
           Model::loadMultiple($modelServicios, Yii::$app->request->post());
 
           // validate all models
@@ -115,6 +115,12 @@ class FacturaServiciosController extends Controller
 
           if ($valid) {
             $model->estado = 1;
+            if ($model->check != '0') {
+              $model->todos = 1;
+            }
+            else {
+              $model->todos = 0;
+            }
               $transaction = \Yii::$app->db->beginTransaction();
               try {
                   if ($flag = $model->save(false)) {
@@ -128,6 +134,21 @@ class FacturaServiciosController extends Controller
                   }
                   if ($flag) {
                       $transaction->commit();
+                      if ($model->check != '0') {
+                        $modelApa = Apartamentos::find()->all();
+                        foreach ($modelApa as $key => $value) {
+                          $model2 = new FacturaServiciosApartamentos();
+                          $model2->factura_servicios_id = $model->id_factura_servicios;
+                          $model2->apartamentos_id = $value->id_apartamento;
+                          $model2->save();
+                        }
+                      }
+                      else {
+                          $model2 = new FacturaServiciosApartamentos();
+                          $model2->factura_servicios_id = $model->id_factura_servicios;
+                          $model2->apartamentos_id = $model->apartamentos_id_apartamento;
+                          $model2->save();
+                      }
                       return $this->redirect(['view', 'id' => $model->id_factura_servicios]);
                   }
               } catch (Exception $e) {
@@ -190,19 +211,18 @@ class FacturaServiciosController extends Controller
         }
     }
 
-<<<<<<< HEAD
     public function actionViewImprimir($id){
       $this->layout ="main-imprimir";
       $model2 = FacturaServiciosServicios::find()->where(['factura_servicios_id_factura_servicios' => $id])->all();
       return $this->render('view-imprimir', [
           'model' => $this->findModel($id), 'model2' => $model2
       ]);
-=======
+    }
+
     public function actionPagarFactura($id){
         $model = $this->findModel($id);
         $model->estado = 2;
         $model->save();
         return $this->redirect(['view', 'id' => $model->id_factura_servicios]);
->>>>>>> origin/master
     }
 }
