@@ -204,5 +204,9 @@ class FacturaGastosController extends Controller
         $model->estado = 2;
         $model->save();
         return $this->redirect(['view', 'id' => $model->id_factura_gastos]);
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
     }
 }
